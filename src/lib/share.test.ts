@@ -55,7 +55,7 @@ describe("share utilities", () => {
 
   it("builds encoded social share URLs", () => {
     const url = "https://rubberduck.net/binnacle/post-1";
-    const title = "Project Signal: DeepRatAI/Dev4All";
+    const title = "Project Signal: DeepRatAI/rubberDuck";
 
     expect(createSocialShareUrl("x", { url, title })).toContain(
       "https://twitter.com/intent/tweet?",

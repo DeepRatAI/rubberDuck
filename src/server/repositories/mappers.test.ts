@@ -43,7 +43,7 @@ describe("repository mappers", () => {
         type: "post",
         contentType: "project_signal",
         category: "Project",
-        title: "Project Signal: DeepRatAI/Dev4All",
+        title: "Project Signal: DeepRatAI/rubberDuck",
         body: "Local-first developer network.",
         authorId: "user-1",
         authorName: "Alex Chen",
@@ -52,10 +52,10 @@ describe("repository mappers", () => {
         interests: 3,
         comments: 2,
         projectSignal: {
-          repoUrl: "https://github.com/DeepRatAI/Dev4All",
-          repoKey: "deepratai/dev4all",
+          repoUrl: "https://github.com/DeepRatAI/rubberDuck",
+          repoKey: "deepratai/rubberduck",
           owner: "DeepRatAI",
-          name: "Dev4All",
+          name: "rubberDuck",
           description: "Local-first developer network.",
           primaryLanguage: "TypeScript",
           domains: ["AI Engineering"],
@@ -79,7 +79,7 @@ describe("repository mappers", () => {
     expect(item).toMatchObject({
       contentType: "project_signal",
       projectSignal: {
-        repoKey: "deepratai/dev4all",
+        repoKey: "deepratai/rubberduck",
         needs: ["Technical feedback"],
       },
     });

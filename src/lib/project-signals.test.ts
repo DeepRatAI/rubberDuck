@@ -9,9 +9,9 @@ import {
 } from "./project-signals";
 
 const preview: GitHubRepoPreview = {
-  url: "https://github.com/DeepRatAI/Dev4All",
+  url: "https://github.com/DeepRatAI/rubberDuck",
   owner: "DeepRatAI",
-  name: "Dev4All",
+  name: "rubberDuck",
   description: "Local-first developer social network for builders.",
   stars: 42,
   forks: 7,
@@ -31,18 +31,18 @@ const preview: GitHubRepoPreview = {
 
 describe("Project Signal", () => {
   it("normalizes common GitHub repository URLs into a stable repo identity", () => {
-    expect(parseGitHubRepoUrl("https://github.com/DeepRatAI/Dev4All")).toEqual({
+    expect(parseGitHubRepoUrl("https://github.com/DeepRatAI/rubberDuck")).toEqual({
       owner: "DeepRatAI",
-      name: "Dev4All",
-      repoKey: "deepratai/dev4all",
-      url: "https://github.com/DeepRatAI/Dev4All",
+      name: "rubberDuck",
+      repoKey: "deepratai/rubberduck",
+      url: "https://github.com/DeepRatAI/rubberDuck",
     });
-    expect(parseGitHubRepoUrl("git@github.com:DeepRatAI/Dev4All.git")).toEqual(
+    expect(parseGitHubRepoUrl("git@github.com:DeepRatAI/rubberDuck.git")).toEqual(
       {
         owner: "DeepRatAI",
-        name: "Dev4All",
-        repoKey: "deepratai/dev4all",
-        url: "https://github.com/DeepRatAI/Dev4All",
+        name: "rubberDuck",
+        repoKey: "deepratai/rubberduck",
+        url: "https://github.com/DeepRatAI/rubberDuck",
       },
     );
   });
@@ -56,7 +56,7 @@ describe("Project Signal", () => {
   it("builds an editable post draft from shallow repository evidence", () => {
     const draft = buildProjectSignalDraft(preview);
 
-    expect(draft.title).toBe("Project Signal: DeepRatAI/Dev4All");
+    expect(draft.title).toBe("Project Signal: DeepRatAI/rubberDuck");
     expect(draft.body).toContain("Local-first developer social network");
     expect(draft.tags).toEqual(
       expect.arrayContaining([
@@ -71,10 +71,10 @@ describe("Project Signal", () => {
       ]),
     );
     expect(draft.projectSignal).toMatchObject({
-      repoUrl: "https://github.com/DeepRatAI/Dev4All",
-      repoKey: "deepratai/dev4all",
+      repoUrl: "https://github.com/DeepRatAI/rubberDuck",
+      repoKey: "deepratai/rubberduck",
       owner: "DeepRatAI",
-      name: "Dev4All",
+      name: "rubberDuck",
       primaryLanguage: "TypeScript",
       license: "MIT",
       domains: ["AI Engineering", "Developer Tools", "Open Source"],
@@ -95,7 +95,7 @@ describe("Project Signal", () => {
     const draft = buildProjectSignalDraft(preview);
 
     expect(createProjectSignalCardText(draft.projectSignal)).toBe(
-      "DeepRatAI/Dev4All · TypeScript, Next.js, Drizzle · Looking for feedback · needs Technical feedback, Testing",
+      "DeepRatAI/rubberDuck · TypeScript, Next.js, Drizzle · Looking for feedback · needs Technical feedback, Testing",
     );
   });
 

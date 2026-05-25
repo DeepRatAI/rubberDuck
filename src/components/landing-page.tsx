@@ -61,7 +61,7 @@ export function LandingPage({
           </Link>
           <Link
             className="hover:text-[color:var(--accent)]"
-            href="https://github.com/DeepRatAI/Dev4All"
+            href="https://github.com/DeepRatAI/rubberDuck"
             target="_blank"
           >
             {dictionary.github}

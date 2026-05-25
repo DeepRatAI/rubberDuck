@@ -22,10 +22,10 @@ describe("Project Signal response actions", () => {
     expect(
       createProjectSignalResponseNotification({
         actorName: "Mina Park",
-        repoLabel: "DeepRatAI/Dev4All",
+        repoLabel: "DeepRatAI/rubberDuck",
         intent: "review",
       }),
-    ).toBe("Mina Park offered to review DeepRatAI/Dev4All.");
+    ).toBe("Mina Park offered to review DeepRatAI/rubberDuck.");
   });
 
   it("deduplicates and orders persisted response intents by product priority", () => {

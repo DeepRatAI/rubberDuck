@@ -83,9 +83,9 @@ const dates = {
 } as const;
 
 const rubberDuckRepoPreview = {
-  url: "https://github.com/DeepRatAI/Dev4All",
+  url: "https://github.com/DeepRatAI/rubberDuck",
   owner: "DeepRatAI",
-  name: "Dev4All",
+  name: "rubberDuck",
   description:
     "RubberDuck is a bilingual developer social network with Binnacle, executable courses, RSS discovery, and privacy-first profiles.",
   stars: 42,
@@ -931,7 +931,7 @@ async function upsertRssAndOps() {
         type: "project_signal_response",
         actorId: ids.mina,
         recipientId: ids.alex,
-        message: "Mina Park offered to review DeepRatAI/Dev4All.",
+        message: "Mina Park offered to review DeepRatAI/rubberDuck.",
         entityId: ids.postRubberDuckSignal,
         createdAt: dates.projectSignal,
         read: false,

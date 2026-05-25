@@ -4,10 +4,10 @@ import type { ProjectSignalMetadata } from "./project-signals";
 import { buildProjectSignalShareSvg } from "./share-card";
 
 const projectSignal: ProjectSignalMetadata = {
-  repoUrl: "https://github.com/DeepRatAI/Dev4All",
-  repoKey: "deepratai/dev4all",
+  repoUrl: "https://github.com/DeepRatAI/rubberDuck",
+  repoKey: "deepratai/rubberduck",
   owner: "DeepRatAI",
-  name: "Dev4All",
+  name: "rubberDuck",
   description: "Local-first developer network for executable knowledge.",
   primaryLanguage: "TypeScript",
   domains: ["AI Engineering"],
@@ -37,7 +37,7 @@ describe("share cards", () => {
     expect(svg).toContain("<svg");
     expect(svg).toContain("Project &lt;Signal&gt;");
     expect(svg).toContain("Alex &amp; Co");
-    expect(svg).toContain("DeepRatAI/Dev4All");
+    expect(svg).toContain("DeepRatAI/rubberDuck");
     expect(svg).toContain("Technical feedback");
   });
 });

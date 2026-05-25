@@ -150,7 +150,7 @@ describe("social action validators", () => {
       postSchema.safeParse({
         contentType: "project_signal",
         category: "Project",
-        title: "Project Signal: DeepRatAI/Dev4All",
+        title: "Project Signal: DeepRatAI/rubberDuck",
         body: "A local-first developer network looking for technical feedback.",
         tags: [
           "AI Engineering",
@@ -160,10 +160,10 @@ describe("social action validators", () => {
         ],
         media: [],
         projectSignal: {
-          repoUrl: "https://github.com/DeepRatAI/Dev4All",
-          repoKey: "deepratai/dev4all",
+          repoUrl: "https://github.com/DeepRatAI/rubberDuck",
+          repoKey: "deepratai/rubberduck",
           owner: "DeepRatAI",
-          name: "Dev4All",
+          name: "rubberDuck",
           description: "Local-first developer network.",
           primaryLanguage: "TypeScript",
           license: "MIT",

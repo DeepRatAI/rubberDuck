@@ -8,7 +8,7 @@ Do not paste secrets into issues, commits, screenshots, or public chat. Store th
 
 Status:
 
-- Complete: the local project was initialized as Git repo and pushed to `https://github.com/DeepRatAI/Dev4All` on branch `main`.
+- Complete: the local project was initialized as Git repo and pushed to `https://github.com/DeepRatAI/rubberDuck` on branch `main`.
 
 Required from you before CI can become green:
 
@@ -23,7 +23,7 @@ Required from you before CI can become green:
 Current repo-side work:
 
 - `.github/workflows/ci.yml` runs lint, i18n coverage, high-confidence secret scanning, typecheck, unit tests, high-severity dependency audit, build, migration/seed smoke, and Playwright E2E with artifacts.
-- The intended production repository is `https://github.com/DeepRatAI/Dev4All`.
+- The intended production repository is `https://github.com/DeepRatAI/rubberDuck`.
 
 ## 2. Vercel
 
