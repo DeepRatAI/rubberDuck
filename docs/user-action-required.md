@@ -29,8 +29,9 @@ Current repo-side work:
 
 Required from you:
 
-- Authenticate the Vercel CLI locally or provide a `VERCEL_TOKEN` with access to team `team_lc362xI8Nuaw39A4V0eQCZbU` (`gonzalo-romero-deeprats-projects`).
+- Complete: `../credenciales.txt` contains a usable Vercel token with access to team `team_lc362xI8Nuaw39A4V0eQCZbU` (`gonzalo-romero-deeprats-projects`).
 - Complete: Vercel project `gonzalo-romero-deeprats-projects/rubberduck` is created, linked locally, and configured as a Next.js project with `pnpm install --frozen-lockfile` and `pnpm build`.
+- Still required: connect the Vercel project to the GitHub repository `DeepRatAI/rubberDuck` through the Vercel Git integration, or deploy manually with the Vercel CLI after environment variables are synced.
 - Set production and preview environment variables:
   - `APP_URL`
   - `NEXTAUTH_URL`
@@ -65,6 +66,12 @@ Repo-side support now available:
 - `/admin/rss` shows admin-only RSS source health, stored article counts, latest article timestamps, and stale-source summary.
 - `/admin` provides the local operational control plane for reports, user enforcement, RSS health, and audit trail.
 - `/admin/audit` exposes recent sensitive administrative events for review.
+
+Current local secret-source state:
+
+- `../credenciales.txt` currently contains GitHub and Vercel tokens plus the intended GitHub repo URLs.
+- It does not yet contain the application runtime variables needed by Vercel, such as `DATABASE_URL`, OAuth client IDs/secrets, R2 S3 credentials, Redis, PostHog, Sentry, or cron/auth secrets.
+- Add missing values as `KEY=value` lines to `../credenciales.txt`, then run `pnpm vercel:env:sync`. The sync script validates presence and uploads values to Vercel without printing secret values.
 
 ## 3. Domain and DNS
 
@@ -177,10 +184,12 @@ Required from you:
 
 - GitHub OAuth callback:
   - local: `http://localhost:3000/api/auth/callback/github`
-  - production: `https://rubberduck.net/api/auth/callback/github`
+  - staging before final domain: `https://<vercel-production-domain>/api/auth/callback/github`
+  - production after DNS: `https://rubberduck.net/api/auth/callback/github`
 - Google OAuth callback:
   - local: `http://localhost:3000/api/auth/callback/google`
-  - production: `https://rubberduck.net/api/auth/callback/google`
+  - staging before final domain: `https://<vercel-production-domain>/api/auth/callback/google`
+  - production after DNS: `https://rubberduck.net/api/auth/callback/google`
 - Store credentials:
   - `GITHUB_ID`
   - `GITHUB_SECRET`
