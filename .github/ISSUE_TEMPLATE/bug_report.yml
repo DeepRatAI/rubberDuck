@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a reproducible RubberDuck defect.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What failed?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include route, account state, inputs, and expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, app URL, local/preview/production, and any relevant logs.
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact area
+      options:
+        - label: Auth/onboarding
+        - label: Binnacle/social
+        - label: Project Signal
+        - label: Course Studio
+        - label: Code execution
+        - label: RSS/home feed
+        - label: Moderation/privacy
+        - label: Accessibility/mobile

@@ -1,0 +1,2 @@
+ALTER TABLE "profiles" ADD COLUMN "content_preferences" jsonb DEFAULT '[]'::jsonb NOT NULL;--> statement-breakpoint
+ALTER TABLE "profiles" ADD COLUMN "participation_intents" jsonb DEFAULT '[]'::jsonb NOT NULL;

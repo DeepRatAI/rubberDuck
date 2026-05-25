@@ -1,0 +1,32 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" fill="#17130F"/>
+  <rect width="1200" height="720" fill="url(#grid)" opacity="0.55"/>
+  <path d="M0 548C132 496 220 533 352 488C480 444 538 314 704 313C849 312 914 408 1042 363C1103 342 1144 303 1200 267V720H0V548Z" fill="#251D17"/>
+  <path d="M84 156H314V254H478V188H664V298H878V222H1116" stroke="#16D9D2" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M96 482H265V405H444V520H612V418H796V486H1034V396H1128" stroke="#D69A38" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M170 326H360M360 326V366H548M548 366V252H736M736 252V342H988" stroke="#48C78E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <g fill="#17130F" stroke="#16D9D2" stroke-width="5">
+    <circle cx="84" cy="156" r="20"/>
+    <circle cx="478" cy="188" r="20"/>
+    <circle cx="878" cy="222" r="20"/>
+    <circle cx="1116" cy="222" r="20"/>
+  </g>
+  <g fill="#17130F" stroke="#D69A38" stroke-width="5">
+    <circle cx="96" cy="482" r="18"/>
+    <circle cx="444" cy="520" r="18"/>
+    <circle cx="796" cy="486" r="18"/>
+    <circle cx="1128" cy="396" r="18"/>
+  </g>
+  <g opacity="0.72">
+    <rect x="512" y="248" width="176" height="176" rx="18" fill="#0F1717" stroke="#574636" stroke-width="4"/>
+    <rect x="552" y="288" width="96" height="96" rx="10" fill="#211D18" stroke="#16D9D2" stroke-width="4"/>
+    <path d="M512 288H452M512 328H452M512 368H452M688 288H748M688 328H748M688 368H748M552 248V188M592 248V188M632 248V188M552 424V484M592 424V484M632 424V484" stroke="#B9A98F" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="72" y="650" fill="#F6F0DF" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="38" font-weight="700" letter-spacing="5">RUBBERDUCK</text>
+  <text x="72" y="688" fill="#16D9D2" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="18" letter-spacing="4">BUILD IT IN THE OPEN</text>
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#574636" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>

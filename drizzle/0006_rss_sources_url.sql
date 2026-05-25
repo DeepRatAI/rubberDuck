@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "rss_sources_url_idx" ON "rss_sources" USING btree ("url");

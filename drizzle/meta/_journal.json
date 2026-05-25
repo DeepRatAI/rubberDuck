@@ -1,0 +1,125 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1778172781028,
+      "tag": "0000_stormy_nebula",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778196360317,
+      "tag": "0001_orange_wonder_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778281157107,
+      "tag": "0002_awesome_toxin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778284822644,
+      "tag": "0003_hard_blizzard",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778363493755,
+      "tag": "0004_flowery_gamma_corps",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1778368343408,
+      "tag": "0005_complete_blue_shield",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1778414874973,
+      "tag": "0006_rss_sources_url",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1778436100000,
+      "tag": "0007_rss_item_images",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1778436200000,
+      "tag": "0008_users_email_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1779231790612,
+      "tag": "0009_glorious_marrow",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1779282393539,
+      "tag": "0010_milky_randall",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1779501090286,
+      "tag": "0011_sharp_shinobi_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1779503201665,
+      "tag": "0012_fantastic_the_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1779504410203,
+      "tag": "0013_sleepy_invaders",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1779569641764,
+      "tag": "0014_rich_vanisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1779570924898,
+      "tag": "0015_peaceful_photon",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1779597332050,
+      "tag": "0016_lean_slayback",
+      "breakpoints": true
+    }
+  ]
+}

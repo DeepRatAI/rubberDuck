@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose an improvement aligned with the RubberDuck concept.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or operational problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the workflow, constraints, and success criteria.
+    validations:
+      required: true
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Required considerations
+      options:
+        - label: Bilingual UX
+        - label: Privacy controls
+        - label: Moderation or abuse resistance
+        - label: Accessibility
+        - label: Tests and validation
+        - label: Documentation
