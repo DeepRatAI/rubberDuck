@@ -30,7 +30,7 @@ Current repo-side work:
 Required from you:
 
 - Authenticate the Vercel CLI locally or provide a `VERCEL_TOKEN` with access to team `team_lc362xI8Nuaw39A4V0eQCZbU` (`gonzalo-romero-deeprats-projects`).
-- Complete: Vercel project `gonzalo-romero-deeprats-projects/rubberduck` is created and linked locally.
+- Complete: Vercel project `gonzalo-romero-deeprats-projects/rubberduck` is created, linked locally, and configured as a Next.js project with `pnpm install --frozen-lockfile` and `pnpm build`.
 - Set production and preview environment variables:
   - `APP_URL`
   - `NEXTAUTH_URL`
