@@ -70,7 +70,8 @@ Repo-side support now available:
 Current local secret-source state:
 
 - `../credenciales.txt` currently contains GitHub and Vercel tokens plus the intended GitHub repo URLs.
-- It does not yet contain the application runtime variables needed by Vercel, such as `DATABASE_URL`, OAuth client IDs/secrets, R2 S3 credentials, Redis, PostHog, Sentry, or cron/auth secrets.
+- It now also contains generated internal runtime secrets/defaults: `AUTH_SECRET`, `NEXTAUTH_SECRET`, `CRON_SECRET`, `RSS_REFRESH_SECRET`, `RUBBERDUCK_STRICT_ENV`, `NEXT_PUBLIC_POSTHOG_HOST`, `STORAGE_DRIVER`, and `R2_BUCKET`.
+- It does not yet contain provider-issued runtime variables needed by Vercel, such as `DATABASE_URL`, OAuth client IDs/secrets, R2 S3 credentials, Redis, PostHog project token, Sentry DSN, or the final/staging canonical URL values.
 - Add missing values as `KEY=value` lines to `../credenciales.txt`, then run `pnpm vercel:env:sync`. The sync script validates presence and uploads values to Vercel without printing secret values.
 
 ## 3. Domain and DNS
