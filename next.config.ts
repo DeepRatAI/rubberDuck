@@ -17,6 +17,10 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const posthogOrigin = originFromUrl(
   process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com",
 );
+const posthogAssetsOrigin = posthogOrigin?.replace(
+  ".i.posthog.com",
+  "-assets.i.posthog.com",
+);
 const mediaOrigin = originFromUrl(process.env.R2_PUBLIC_BASE_URL);
 const connectSrc = [
   "'self'",
@@ -27,6 +31,16 @@ const connectSrc = [
   "https://cdn.jsdelivr.net",
   "https://challenges.cloudflare.com",
   posthogOrigin,
+  posthogAssetsOrigin,
+].filter(Boolean);
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  "'wasm-unsafe-eval'",
+  ...(isDevelopment ? ["'unsafe-eval'"] : []),
+  "https://cdn.jsdelivr.net",
+  "https://challenges.cloudflare.com",
+  posthogAssetsOrigin,
 ].filter(Boolean);
 const imgSrc = ["'self'", "blob:", "data:", "https:", mediaOrigin].filter(
   Boolean,
@@ -35,7 +49,7 @@ const mediaSrc = ["'self'", "blob:", "data:", mediaOrigin].filter(Boolean);
 
 const cspHeader = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDevelopment ? " 'unsafe-eval'" : ""} https://cdn.jsdelivr.net https://challenges.cloudflare.com`,
+  `script-src ${scriptSrc.join(" ")}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src ${imgSrc.join(" ")}`,
   `media-src ${mediaSrc.join(" ")}`,
