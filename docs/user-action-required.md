@@ -38,11 +38,11 @@ Required from you:
 - Add a Vercel Cron for RSS refresh after the production URL exists:
   - path: `/api/rss/refresh`
   - secret: `CRON_SECRET` or `RSS_REFRESH_SECRET`
-  - cadence: every 60 minutes through `vercel.json`
+  - cadence: daily through `vercel.json` on Vercel Hobby; hourly refresh requires Vercel Pro.
 
 Repo-side support now available:
 
-- `vercel.json` defines an hourly RSS refresh cron for `/api/rss/refresh`.
+- `vercel.json` defines a daily RSS refresh cron for `/api/rss/refresh`, which is compatible with Vercel Hobby limits.
 - The RSS refresh endpoint accepts Vercel Cron's `Authorization: Bearer $CRON_SECRET` header, plus the existing RubberDuck header/query secret paths.
 
 Validation command after Vercel envs exist:
