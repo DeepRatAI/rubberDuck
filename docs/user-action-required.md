@@ -31,19 +31,10 @@ Required from you:
 
 - Complete: `../credenciales.txt` contains a usable Vercel token with access to team `team_lc362xI8Nuaw39A4V0eQCZbU` (`gonzalo-romero-deeprats-projects`).
 - Complete: Vercel project `gonzalo-romero-deeprats-projects/rubberduck` is created, linked locally, and configured as a Next.js project with `pnpm install --frozen-lockfile` and `pnpm build`.
-- Still required: connect the Vercel project to the GitHub repository `DeepRatAI/rubberDuck` through the Vercel Git integration, or deploy manually with the Vercel CLI after environment variables are synced.
-- Set production and preview environment variables:
-  - `APP_URL`
-  - `NEXTAUTH_URL`
-  - `AUTH_SECRET`
-  - `NEXTAUTH_SECRET`
-  - `DATABASE_URL`
-  - `RUBBERDUCK_STRICT_ENV=true`
-  - `RSS_REFRESH_SECRET`
-  - `ADMIN_EMAILS`
-  - provider-specific variables listed below
-- Configure the build command as `pnpm build`.
-- Configure the install command as `pnpm install --frozen-lockfile`.
+- Complete: Vercel project is connected to GitHub repository `DeepRatAI/rubberDuck` with production branch `main`.
+- Complete: production and preview environment variables were synced from `../credenciales.txt` with `pnpm vercel:env:sync`.
+- Complete: build command is `pnpm build`.
+- Complete: install command is `pnpm install --frozen-lockfile`.
 - Add a Vercel Cron for RSS refresh after the production URL exists:
   - path: `/api/rss/refresh`
   - secret: `CRON_SECRET` or `RSS_REFRESH_SECRET`
@@ -69,10 +60,9 @@ Repo-side support now available:
 
 Current local secret-source state:
 
-- `../credenciales.txt` currently contains GitHub and Vercel tokens plus the intended GitHub repo URLs.
-- It now also contains generated internal runtime secrets/defaults: `AUTH_SECRET`, `NEXTAUTH_SECRET`, `CRON_SECRET`, `RSS_REFRESH_SECRET`, `RUBBERDUCK_STRICT_ENV`, `NEXT_PUBLIC_POSTHOG_HOST`, `STORAGE_DRIVER`, and `R2_BUCKET`.
-- It does not yet contain provider-issued runtime variables needed by Vercel, such as `DATABASE_URL`, OAuth client IDs/secrets, R2 S3 credentials, Redis, PostHog project token, Sentry DSN, or the final/staging canonical URL values.
-- Add missing values as `KEY=value` lines to `../credenciales.txt`, then run `pnpm vercel:env:sync`. The sync script validates presence and uploads values to Vercel without printing secret values.
+- `../credenciales.txt` currently contains the deployment secret source for staging: GitHub/Vercel tokens, app URLs, Auth secrets, pooled Neon `DATABASE_URL`, admin emails, GitHub/Google OAuth credentials, Redis, PostHog, Sentry DSN, and R2 credentials.
+- `pnpm vercel:env:sync` has synced the required keys to Vercel without printing secret values.
+- Do not commit `../credenciales.txt`.
 
 ## 3. Domain and DNS
 
@@ -87,7 +77,7 @@ Required from you:
 
 Required from you:
 
-- Store the pooled Neon connection string in Vercel as `DATABASE_URL`.
+- Complete: pooled Neon connection string is stored in Vercel as `DATABASE_URL`.
 - Keep the direct connection string available locally for migrations if needed.
 - Decide backup posture:
   - beta: Neon branching before schema migrations
@@ -109,20 +99,10 @@ Production rule:
 
 Required from you:
 
-- Create R2 S3-compatible credentials, not only a Cloudflare API token. Cloudflare dashboard path: **R2 > Manage R2 API Tokens > Create API token**. Choose object read/write access for bucket `dev4all`, then copy the generated **Access Key ID** and **Secret Access Key**.
-- Store in Vercel:
-  - `STORAGE_DRIVER=r2`
-  - `R2_ACCOUNT_ID`
-  - `R2_BUCKET`
-  - `R2_ACCESS_KEY_ID`
-  - `R2_SECRET_ACCESS_KEY`
-  - `R2_PUBLIC_BASE_URL`
-- Enable a public development URL or configure a final media domain.
-- Add CORS for:
-  - `https://rubberduck.net`
-  - `https://www.rubberduck.net`
-  - `https://*.vercel.app`
-  - `http://localhost:3000`
+- Complete: R2 S3-compatible credentials are stored in Vercel.
+- Complete: R2 public development URL is stored as `R2_PUBLIC_BASE_URL`.
+- Complete for staging/local: CORS allows `https://rubberduck-sand.vercel.app` and `http://localhost:3000`.
+- Still required after final domain: add `https://rubberduck.net` and `https://www.rubberduck.net` to R2 CORS.
 
 Recommended read CORS:
 
@@ -184,18 +164,14 @@ pnpm vercel:env:sync
 Required from you:
 
 - GitHub OAuth callback:
-  - local: `http://localhost:3000/api/auth/callback/github`
-  - staging before final domain: `https://<vercel-production-domain>/api/auth/callback/github`
+  - staging: `https://rubberduck-sand.vercel.app/api/auth/callback/github`
+  - local optional: `http://localhost:3000/api/auth/callback/github`
   - production after DNS: `https://rubberduck.net/api/auth/callback/github`
 - Google OAuth callback:
-  - local: `http://localhost:3000/api/auth/callback/google`
-  - staging before final domain: `https://<vercel-production-domain>/api/auth/callback/google`
+  - staging: `https://rubberduck-sand.vercel.app/api/auth/callback/google`
+  - local optional: `http://localhost:3000/api/auth/callback/google`
   - production after DNS: `https://rubberduck.net/api/auth/callback/google`
-- Store credentials:
-  - `GITHUB_ID`
-  - `GITHUB_SECRET`
-  - `GOOGLE_CLIENT_ID`
-  - `GOOGLE_CLIENT_SECRET`
+- Complete: `GITHUB_ID`, `GITHUB_SECRET`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET` are stored in Vercel.
 
 Email login recommendation:
 
@@ -225,15 +201,13 @@ Production posture:
 
 Required from you:
 
-- Store PostHog:
-  - `NEXT_PUBLIC_POSTHOG_TOKEN`
-  - `NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com`
-- Store Sentry:
-  - `NEXT_PUBLIC_SENTRY_DSN`
-  - `SENTRY_DSN`
+- Complete: PostHog `NEXT_PUBLIC_POSTHOG_TOKEN` and `NEXT_PUBLIC_POSTHOG_HOST` are stored in Vercel.
+- Complete: Sentry `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_DSN` are stored in Vercel.
+- Deferred until paid/needed: Vercel log/trace drains to Sentry.
+- Optional later for source map upload:
   - `SENTRY_ORG`
   - `SENTRY_PROJECT`
-  - `SENTRY_AUTH_TOKEN` only in CI/Vercel if source map upload is desired
+  - `SENTRY_AUTH_TOKEN`
 - Configure alerts:
   - elevated server error rate
   - failed sign-in spikes
