@@ -115,7 +115,7 @@ function envTypeForKey(key) {
     return "plain";
   }
 
-  return "sensitive";
+  return "encrypted";
 }
 
 const vercelToken = extractVercelToken(rawCredentials);
@@ -179,6 +179,26 @@ if (!response.ok) {
       body.error?.message ?? "unknown error"
     }`,
   );
+  process.exit(1);
+}
+
+const envListResponse = await fetch(
+  `https://api.vercel.com/v10/projects/${projectFile.projectId}/env?teamId=${projectFile.orgId}`,
+  {
+    headers: {
+      authorization: `Bearer ${vercelToken}`,
+    },
+  },
+);
+const envListBody = await envListResponse.json().catch(() => ({}));
+const syncedKeys = new Set((envListBody.envs ?? []).map((env) => env.key));
+const unsynced = [...envValues.keys()].filter((key) => !syncedKeys.has(key));
+
+if (unsynced.length > 0) {
+  console.error("Vercel env sync did not persist these keys:");
+  for (const key of unsynced) {
+    console.error(`- ${key}`);
+  }
   process.exit(1);
 }
 
