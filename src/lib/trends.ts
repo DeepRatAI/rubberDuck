@@ -64,9 +64,15 @@ const stopWords = new Set([
 ]);
 
 const aliasDictionary: Array<{ label: string; patterns: string[] }> = [
-  { label: "AI agents", patterns: ["agentic", "ai agent", "agents", " agent "] },
+  {
+    label: "AI agents",
+    patterns: ["agentic", "ai agent", "agents", " agent "],
+  },
   { label: "OpenAI", patterns: ["openai", "codex", "gpt"] },
-  { label: "LLMs", patterns: ["llm", "large language model", "language model"] },
+  {
+    label: "LLMs",
+    patterns: ["llm", "large language model", "language model"],
+  },
   { label: "Machine learning", patterns: ["machine learning", "ml "] },
   { label: "Postgres", patterns: ["postgres", "postgresql"] },
   { label: "WebGPU", patterns: ["webgpu"] },
@@ -77,7 +83,10 @@ const aliasDictionary: Array<{ label: string; patterns: string[] }> = [
   { label: "Rust", patterns: ["rust"] },
   { label: "Kubernetes", patterns: ["kubernetes", "k8s"] },
   { label: "Docker", patterns: ["docker", "containers"] },
-  { label: "Observability", patterns: ["observability", "tracing", "telemetry"] },
+  {
+    label: "Observability",
+    patterns: ["observability", "tracing", "telemetry"],
+  },
   { label: "Security", patterns: ["security", "vulnerability", "hardening"] },
   { label: "Cloudflare", patterns: ["cloudflare"] },
   { label: "GitHub", patterns: ["github"] },
@@ -153,7 +162,10 @@ function extractCandidates(item: TrendInputItem) {
     [];
   for (const phrase of namedPhrases) {
     const clean = phrase.trim();
-    if (clean.length >= 3 && !/^(The|This|That|How|Why|What|When)$/.test(clean)) {
+    if (
+      clean.length >= 3 &&
+      !/^(The|This|That|How|Why|What|When)$/.test(clean)
+    ) {
       addCandidate(candidates, clean, 3);
     }
   }

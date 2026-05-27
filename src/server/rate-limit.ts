@@ -19,7 +19,8 @@ const globalForRateLimit = globalThis as typeof globalThis & {
 };
 
 const memoryStore =
-  globalForRateLimit.__rubberduckRateLimitStore ?? new Map<string, RateLimitState>();
+  globalForRateLimit.__rubberduckRateLimitStore ??
+  new Map<string, RateLimitState>();
 
 if (process.env.NODE_ENV !== "production") {
   globalForRateLimit.__rubberduckRateLimitStore = memoryStore;

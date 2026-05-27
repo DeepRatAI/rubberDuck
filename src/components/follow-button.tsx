@@ -37,9 +37,7 @@ export function FollowButton({
                 router.refresh();
               })
               .catch((caught: unknown) => {
-                setError(
-                  caught instanceof Error ? caught.message : errorLabel,
-                );
+                setError(caught instanceof Error ? caught.message : errorLabel);
               });
           });
         }}

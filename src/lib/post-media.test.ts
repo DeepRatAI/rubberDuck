@@ -42,8 +42,8 @@ describe("post media", () => {
       "/uploads/posts/00000000-0000-4000-8000-000000000001/11111111-1111-4111-8111-111111111111.webp",
     );
     expect(isPostMediaPublicPath(path)).toBe(true);
-    expect(
-      isPostMediaPublicPath("/uploads/posts/user/../../secret.png"),
-    ).toBe(false);
+    expect(isPostMediaPublicPath("/uploads/posts/user/../../secret.png")).toBe(
+      false,
+    );
   });
 });

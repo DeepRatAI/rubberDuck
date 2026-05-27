@@ -1,14 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  Check,
-  Copy,
-  Mail,
-  MessageCircle,
-  Send,
-  Share2,
-} from "lucide-react";
+import { Check, Copy, Mail, MessageCircle, Send, Share2 } from "lucide-react";
 
 import type { Locale } from "@/lib/domain";
 import { getDictionary } from "@/lib/i18n";
@@ -96,14 +89,18 @@ export function ShareMenu({
     target: Parameters<typeof buildPlatformShareDraft>[0],
   ) {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      await navigator.clipboard.writeText(buildPlatformShareDraft(target, payload));
+      await navigator.clipboard.writeText(
+        buildPlatformShareDraft(target, payload),
+      );
       setCopiedMode("post");
       window.setTimeout(() => setCopiedMode(null), 1800);
     }
   }
 
   return (
-    <div className={compact ? "flex flex-wrap items-center gap-2" : "space-y-2"}>
+    <div
+      className={compact ? "flex flex-wrap items-center gap-2" : "space-y-2"}
+    >
       <Button type="button" variant="secondary" onClick={nativeShare}>
         <Share2 className="size-4" aria-hidden />
         {dictionary.share}

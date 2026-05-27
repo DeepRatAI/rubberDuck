@@ -26,7 +26,22 @@ for (const locale of otherLocales) {
 
 for (const locale of locales) {
   const emptyKeys = Object.entries(dictionaries[locale])
-    .filter(([, value]) => typeof value !== "string" || value.trim() === "")
+    .filter(([, value]) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+
+      if (typeof value === "function") {
+        const sampleArgs = Array.from({ length: value.length }, (_, index) =>
+          index === 0 ? "1" : 1,
+        );
+        const rendered = value(...sampleArgs);
+
+        return typeof rendered !== "string" || rendered.trim() === "";
+      }
+
+      return true;
+    })
     .map(([key]) => key);
 
   if (emptyKeys.length > 0) {

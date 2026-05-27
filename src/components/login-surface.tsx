@@ -126,23 +126,23 @@ export function LoginSurface({
                   {dictionary.continueWithGithub}
                 </button>
               ) : null}
-	              {providers.dev ? (
-	                <button
-	                  type="button"
-	                  onClick={() => void handleLocalDevSignIn()}
-	                  className="flex h-14 items-center justify-center gap-3 rounded-xl border border-[#102A43]/20 bg-white/80 px-5 text-base font-bold text-[#102A43] shadow-[0_14px_30px_rgba(16,42,67,0.08)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FFD447]/55"
-	                >
+              {providers.dev ? (
+                <button
+                  type="button"
+                  onClick={() => void handleLocalDevSignIn()}
+                  className="flex h-14 items-center justify-center gap-3 rounded-xl border border-[#102A43]/20 bg-white/80 px-5 text-base font-bold text-[#102A43] shadow-[0_14px_30px_rgba(16,42,67,0.08)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FFD447]/55"
+                >
                   <ShieldCheck className="size-5 text-[#0F8F60]" aria-hidden />
                   {dictionary.useLocalDevIdentity}
                 </button>
-	              ) : null}
-	            </div>
+              ) : null}
+            </div>
 
-	            {authError ? (
-	              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
-	                {authError}
-	              </p>
-	            ) : null}
+            {authError ? (
+              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                {authError}
+              </p>
+            ) : null}
 
             {!providers.github && !providers.google && !providers.dev ? (
               <p className="status-warning mt-5 rounded-xl p-3 text-sm">

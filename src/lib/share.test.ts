@@ -10,9 +10,9 @@ import {
 
 describe("share utilities", () => {
   it("builds canonical RubberDuck URLs from paths and absolute URLs", () => {
-    expect(createCanonicalUrl("/binnacle/post-1", "https://rubberduck.net")).toBe(
-      "https://rubberduck.net/binnacle/post-1",
-    );
+    expect(
+      createCanonicalUrl("/binnacle/post-1", "https://rubberduck.net"),
+    ).toBe("https://rubberduck.net/binnacle/post-1");
     expect(
       createCanonicalUrl(
         "https://rubberduck.net/courses/rag?lang=es",

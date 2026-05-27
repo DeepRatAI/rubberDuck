@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { getTagCategory, normalizeTagLabels, toTagSlug } from "./social-taxonomy";
+import {
+  getTagCategory,
+  normalizeTagLabels,
+  toTagSlug,
+} from "./social-taxonomy";
 
 describe("social taxonomy", () => {
   it("creates stable slugs for controlled and custom tags", () => {

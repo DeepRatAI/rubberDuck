@@ -20,14 +20,18 @@ export function createCanonicalUrl(pathOrUrl: string, baseUrl: string) {
   try {
     return new URL(pathOrUrl).toString();
   } catch {
-    return new URL(pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`, baseUrl).toString();
+    return new URL(
+      pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`,
+      baseUrl,
+    ).toString();
   }
 }
 
-export function normalizeShareDescription(value: string | undefined, maxLength = 180) {
-  const normalized = (value ?? brand.description)
-    .replace(/\s+/g, " ")
-    .trim();
+export function normalizeShareDescription(
+  value: string | undefined,
+  maxLength = 180,
+) {
+  const normalized = (value ?? brand.description).replace(/\s+/g, " ").trim();
 
   if (normalized.length <= maxLength) {
     return normalized;
@@ -97,16 +101,15 @@ export function buildPlatformShareDraft(
     ].join("\n");
   }
 
-  return [
-    buildShareText(payload.title, description),
-    payload.url,
-    hashtags,
-  ]
+  return [buildShareText(payload.title, description), payload.url, hashtags]
     .filter(Boolean)
     .join("\n\n");
 }
 
-export function createSocialShareUrl(target: ShareTarget, payload: SharePayload) {
+export function createSocialShareUrl(
+  target: ShareTarget,
+  payload: SharePayload,
+) {
   const url = payload.url;
   const title = payload.title;
   const description = normalizeShareDescription(payload.description, 180);

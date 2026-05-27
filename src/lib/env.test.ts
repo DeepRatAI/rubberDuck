@@ -92,8 +92,7 @@ describe("environment configuration", () => {
         NODE_ENV: "production",
         RUBBERDUCK_E2E_MODE: "true",
         NEXTAUTH_URL: "https://rubberduck.net",
-        NEXTAUTH_SECRET:
-          "local-e2e-secret-with-at-least-thirty-two-characters",
+        NEXTAUTH_SECRET: "local-e2e-secret-with-at-least-thirty-two-characters",
       }),
     ).toThrow(/RUBBERDUCK_E2E_MODE is only allowed for localhost/i);
   });

@@ -31,20 +31,22 @@ const preview: GitHubRepoPreview = {
 
 describe("Project Signal", () => {
   it("normalizes common GitHub repository URLs into a stable repo identity", () => {
-    expect(parseGitHubRepoUrl("https://github.com/DeepRatAI/rubberDuck")).toEqual({
+    expect(
+      parseGitHubRepoUrl("https://github.com/DeepRatAI/rubberDuck"),
+    ).toEqual({
       owner: "DeepRatAI",
       name: "rubberDuck",
       repoKey: "deepratai/rubberduck",
       url: "https://github.com/DeepRatAI/rubberDuck",
     });
-    expect(parseGitHubRepoUrl("git@github.com:DeepRatAI/rubberDuck.git")).toEqual(
-      {
-        owner: "DeepRatAI",
-        name: "rubberDuck",
-        repoKey: "deepratai/rubberduck",
-        url: "https://github.com/DeepRatAI/rubberDuck",
-      },
-    );
+    expect(
+      parseGitHubRepoUrl("git@github.com:DeepRatAI/rubberDuck.git"),
+    ).toEqual({
+      owner: "DeepRatAI",
+      name: "rubberDuck",
+      repoKey: "deepratai/rubberduck",
+      url: "https://github.com/DeepRatAI/rubberDuck",
+    });
   });
 
   it("rejects unsupported or incomplete repository URLs", () => {

@@ -126,8 +126,7 @@ export function CoursesIndex({
                     tone="slate"
                     className="border-[color:var(--line)] bg-[color:var(--surface-2)] text-[color:var(--foreground)]"
                   >
-                    <span className="sr-only">Tag </span>
-                    #{tag}
+                    <span className="sr-only">Tag </span>#{tag}
                   </Badge>
                 ))}
               </div>
@@ -139,8 +138,7 @@ export function CoursesIndex({
                 </span>
                 <span className="flex items-center gap-1">
                   <Heart className="size-4" aria-hidden />
-                  {formatNumber(course.thanksCount, locale)}{" "}
-                  {dictionary.thanks}
+                  {formatNumber(course.thanksCount, locale)} {dictionary.thanks}
                 </span>
               </div>
             </Link>

@@ -45,7 +45,10 @@ export async function getCommentsForPost(
       authorHandle: row.authorHandle,
       body: row.status === "active" ? row.body : "_Comment removed by author._",
       status: row.status as "active" | "deleted" | "hidden",
-      canDelete: Boolean(viewerId) && row.status === "active" && row.authorId === viewerId,
+      canDelete:
+        Boolean(viewerId) &&
+        row.status === "active" &&
+        row.authorId === viewerId,
       canMarkHelpful:
         Boolean(viewerId) &&
         row.status === "active" &&

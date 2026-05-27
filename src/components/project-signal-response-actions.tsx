@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { GitPullRequest, MessageSquareText, Rocket, UserPlus } from "lucide-react";
+import {
+  GitPullRequest,
+  MessageSquareText,
+  Rocket,
+  UserPlus,
+} from "lucide-react";
 
 import { respondToProjectSignal } from "@/app/actions";
 import type { Locale } from "@/lib/domain";

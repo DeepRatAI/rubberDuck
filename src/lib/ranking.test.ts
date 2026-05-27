@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import type { Course, FeedItem, Viewer } from "./domain";
-import { explainFeedItemForViewer, rankCourses, rankFeedItems } from "./ranking";
+import {
+  explainFeedItemForViewer,
+  rankCourses,
+  rankFeedItems,
+} from "./ranking";
 
 const now = "2026-05-20T12:00:00.000Z";
 
@@ -11,7 +15,9 @@ const viewer: Viewer = {
   interests: ["ai", "postgres", "systems"],
 };
 
-function feedItem(overrides: Partial<FeedItem> & Pick<FeedItem, "id">): FeedItem {
+function feedItem(
+  overrides: Partial<FeedItem> & Pick<FeedItem, "id">,
+): FeedItem {
   const { id, ...rest } = overrides;
 
   return {
@@ -65,10 +71,12 @@ describe("feed ranking", () => {
       { mode: "for-you", now },
     );
 
-    expect(ranked.map((item) => item.id).slice(0, 2).sort()).toEqual([
-      "followed",
-      "matched",
-    ]);
+    expect(
+      ranked
+        .map((item) => item.id)
+        .slice(0, 2)
+        .sort(),
+    ).toEqual(["followed", "matched"]);
     expect(ranked.at(-1)?.id).toBe("generic");
   });
 

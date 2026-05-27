@@ -78,11 +78,7 @@ export function OnboardingSurface({
     "Technical build logs",
   ]);
   const [selectedParticipationIntents, setSelectedParticipationIntents] =
-    useState([
-      "I build projects",
-      "I review projects",
-      "I can contribute",
-    ]);
+    useState(["I build projects", "I review projects", "I can contribute"]);
   const [seniority, setSeniority] = useState("senior");
   const [workStatus, setWorkStatus] = useState("open_to_collaborate");
   const [availability, setAvailability] = useState("part_time");
@@ -301,9 +297,7 @@ export function OnboardingSurface({
               </label>
             </div>
             {error ? (
-              <p className="status-warning rounded-md p-3 text-sm">
-                {error}
-              </p>
+              <p className="status-warning rounded-md p-3 text-sm">{error}</p>
             ) : null}
             <div className="status-success flex items-center justify-between rounded-lg p-4 text-sm">
               <span className="flex items-center gap-2">

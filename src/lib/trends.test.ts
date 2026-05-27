@@ -27,14 +27,24 @@ describe("buildExternalTrends", () => {
     const trends = buildExternalTrends(
       [
         item("OpenAI ships new Codex agent controls", "OpenAI News", ["ai"], 2),
-        item("GitHub improves AI agent workflows", "GitHub Blog", ["github"], 3),
+        item(
+          "GitHub improves AI agent workflows",
+          "GitHub Blog",
+          ["github"],
+          3,
+        ),
         item(
           "Hugging Face publishes AI agents guide",
           "Hugging Face Blog",
           ["machine-learning"],
           4,
         ),
-        item("Postgres releases planner improvements", "Postgres Weekly", ["postgres"], 5),
+        item(
+          "Postgres releases planner improvements",
+          "Postgres Weekly",
+          ["postgres"],
+          5,
+        ),
       ],
       { now },
     );
@@ -50,7 +60,12 @@ describe("buildExternalTrends", () => {
     const trends = buildExternalTrends(
       [
         item("WebGPU production debugging notes", "Mozilla Hacks", ["web"], 72),
-        item("WebGPU compute lands in a new browser build", "Google Developers", ["web"], 96),
+        item(
+          "WebGPU compute lands in a new browser build",
+          "Google Developers",
+          ["web"],
+          96,
+        ),
       ],
       { now },
     );

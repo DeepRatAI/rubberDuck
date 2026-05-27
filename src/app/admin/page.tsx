@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  Activity,
-  FileWarning,
-  Rss,
-  Shield,
-  Users,
-} from "lucide-react";
+import { Activity, FileWarning, Rss, Shield, Users } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { Panel, SectionHeader } from "@/components/ui/panel";
@@ -38,7 +32,9 @@ export default async function AdminPage({
   ]);
   const rssSummary = summarizeRssHealth(rssSources);
   const openReports = reports.filter((report) => !report.resolved).length;
-  const restrictedAccounts = accounts.filter((account) => account.banned).length;
+  const restrictedAccounts = accounts.filter(
+    (account) => account.banned,
+  ).length;
 
   const destinations = [
     {
@@ -131,8 +127,7 @@ export default async function AdminPage({
                 <div>
                   <p className="font-medium">{event.action}</p>
                   <p className="text-[color:var(--muted)]">
-                    {event.actorName} {"->"} {event.entityType}{" "}
-                    {event.entityId}
+                    {event.actorName} {"->"} {event.entityType} {event.entityId}
                   </p>
                 </div>
                 <time className="text-[color:var(--muted)]">

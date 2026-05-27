@@ -54,7 +54,11 @@ function hoursSince(dateValue: string | undefined, now: Date) {
   return Math.max(0, (now.getTime() - timestamp) / 36e5);
 }
 
-function freshnessScore(dateValue: string | undefined, now: Date, halfLifeHours: number) {
+function freshnessScore(
+  dateValue: string | undefined,
+  now: Date,
+  halfLifeHours: number,
+) {
   return Math.pow(0.5, hoursSince(dateValue, now) / halfLifeHours);
 }
 
@@ -110,7 +114,12 @@ function projectSignalQuality(item: FeedItem, viewer: Viewer) {
   );
 }
 
-function feedScore(item: FeedItem, viewer: Viewer, mode: FeedRankingMode, now: Date) {
+function feedScore(
+  item: FeedItem,
+  viewer: Viewer,
+  mode: FeedRankingMode,
+  now: Date,
+) {
   // RubberDuck ranks for useful return visits: relevance, freshness, follows,
   // diversity, and positive contribution signals. It intentionally avoids
   // streak pressure, autoplay loops, negative public counters, and hidden
@@ -139,11 +148,14 @@ function feedScore(item: FeedItem, viewer: Viewer, mode: FeedRankingMode, now: D
   if (mode === "following") {
     const followSignal = followsAuthor || ownContent ? 2.4 : 0;
     const rssInterestBridge = item.type === "rss" && affinity > 0 ? 0.85 : 0;
-    return followSignal + rssInterestBridge + freshness * 0.9 + engagement * 0.45;
+    return (
+      followSignal + rssInterestBridge + freshness * 0.9 + engagement * 0.45
+    );
   }
 
   const followSignal = followsAuthor ? 0.9 : ownContent ? 0.35 : 0;
-  const typeBalance = item.type === "rss" ? 0.22 : item.type === "course" ? 0.35 : 0.28;
+  const typeBalance =
+    item.type === "rss" ? 0.22 : item.type === "course" ? 0.35 : 0.28;
 
   return (
     affinity * 1.45 +
@@ -165,7 +177,9 @@ export function explainFeedItemForViewer(item: FeedItem, viewer: Viewer) {
   }
 
   const interests = normalizedSet(viewer.interests);
-  const matchingTags = item.tags.filter((tag) => interests.has(tag.toLowerCase()));
+  const matchingTags = item.tags.filter((tag) =>
+    interests.has(tag.toLowerCase()),
+  );
   const reasons = [
     matchingTags[0] ? `Matches your interest in ${matchingTags[0]}` : undefined,
     viewer.follows.includes(item.authorId)
@@ -178,7 +192,11 @@ export function explainFeedItemForViewer(item: FeedItem, viewer: Viewer) {
   return reasons.slice(0, 3) as string[];
 }
 
-function isVisibleInMode(item: FeedItem, viewer: Viewer, mode: FeedRankingMode) {
+function isVisibleInMode(
+  item: FeedItem,
+  viewer: Viewer,
+  mode: FeedRankingMode,
+) {
   if (item.viewerState?.reported) {
     return false;
   }
@@ -223,7 +241,8 @@ function rerankWithDiversity(scored: Array<{ item: FeedItem; score: number }>) {
 
     for (let index = 0; index < remaining.length; index += 1) {
       const candidate = remaining[index];
-      const adjustedScore = candidate.score - diversityPenalty(candidate.item, selected);
+      const adjustedScore =
+        candidate.score - diversityPenalty(candidate.item, selected);
       if (adjustedScore > bestScore) {
         bestIndex = index;
         bestScore = adjustedScore;
@@ -269,7 +288,14 @@ function courseRichness(course: RankableCourse) {
   const outlineItems = course.ipynbMetadata?.outline?.length ?? 0;
   const exercises = course.exercises?.length ?? 0;
 
-  return Math.min(1, (course.sections.length + exercises * 1.2 + notebookCells * 0.12 + outlineItems * 0.18) / 16);
+  return Math.min(
+    1,
+    (course.sections.length +
+      exercises * 1.2 +
+      notebookCells * 0.12 +
+      outlineItems * 0.18) /
+      16,
+  );
 }
 
 function courseScore<T extends RankableCourse>(
@@ -280,8 +306,14 @@ function courseScore<T extends RankableCourse>(
 ) {
   const affinity = tagAffinity(course.tags, viewer);
   const freshness = freshnessScore(course.updatedAt, now, 168);
-  const completionSignal = Math.min(1, Math.log1p(course.completionCount ?? 0) / Math.log1p(250));
-  const thanksSignal = Math.min(1, Math.log1p(course.thanksCount ?? 0) / Math.log1p(150));
+  const completionSignal = Math.min(
+    1,
+    Math.log1p(course.completionCount ?? 0) / Math.log1p(250),
+  );
+  const thanksSignal = Math.min(
+    1,
+    Math.log1p(course.thanksCount ?? 0) / Math.log1p(150),
+  );
   const richness = courseRichness(course);
 
   if (mode === "latest") {
@@ -289,7 +321,12 @@ function courseScore<T extends RankableCourse>(
   }
 
   if (mode === "popular") {
-    return completionSignal * 1.4 + thanksSignal * 1.2 + freshness * 0.4 + richness * 0.35;
+    return (
+      completionSignal * 1.4 +
+      thanksSignal * 1.2 +
+      freshness * 0.4 +
+      richness * 0.35
+    );
   }
 
   return (
@@ -311,7 +348,10 @@ export function rankCourses<T extends RankableCourse>(
   const now = resolveNow(options.now);
 
   return courses
-    .map((course) => ({ course, score: courseScore(course, viewer, mode, now) }))
+    .map((course) => ({
+      course,
+      score: courseScore(course, viewer, mode, now),
+    }))
     .toSorted((a, b) => b.score - a.score)
     .map(({ course }) => course);
 }

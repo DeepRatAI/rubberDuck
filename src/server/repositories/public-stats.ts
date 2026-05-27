@@ -39,7 +39,9 @@ export async function getPublicStats(now = new Date()): Promise<PublicStats> {
         db
           .select({ value: count() })
           .from(posts)
-          .where(and(eq(posts.status, "active"), eq(posts.category, "Project"))),
+          .where(
+            and(eq(posts.status, "active"), eq(posts.category, "Project")),
+          ),
       ),
       getCount(
         db
@@ -57,7 +59,9 @@ export async function getPublicStats(now = new Date()): Promise<PublicStats> {
         db
           .select({ value: count() })
           .from(posts)
-          .where(and(eq(posts.status, "active"), gte(posts.createdAt, todayStart))),
+          .where(
+            and(eq(posts.status, "active"), gte(posts.createdAt, todayStart)),
+          ),
       ),
     ]);
 

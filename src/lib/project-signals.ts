@@ -168,9 +168,7 @@ export function parseGitHubRepoUrl(value: string): GitHubRepoIdentity | null {
     return null;
   }
 
-  const [owner, rawName, ...rest] = url.pathname
-    .split("/")
-    .filter(Boolean);
+  const [owner, rawName, ...rest] = url.pathname.split("/").filter(Boolean);
 
   if (!owner || !rawName || rest.length > 0) {
     return null;
@@ -179,7 +177,10 @@ export function parseGitHubRepoUrl(value: string): GitHubRepoIdentity | null {
   return toRepoIdentity(owner, rawName.replace(/\.git$/i, ""));
 }
 
-function toRepoIdentity(owner: string, name: string): GitHubRepoIdentity | null {
+function toRepoIdentity(
+  owner: string,
+  name: string,
+): GitHubRepoIdentity | null {
   if (!/^[a-zA-Z0-9_.-]+$/.test(owner) || !/^[a-zA-Z0-9_.-]+$/.test(name)) {
     return null;
   }
@@ -196,10 +197,11 @@ function inferDomains(preview: GitHubRepoPreview) {
   const fromTopics = preview.topics
     .map((topic) => TOPIC_DOMAIN_MAP[normalize(topic)])
     .filter(Boolean);
-  const fromDescription =
-    /developer|tool|builder/i.test(preview.description ?? "")
-      ? ["Developer Tools"]
-      : [];
+  const fromDescription = /developer|tool|builder/i.test(
+    preview.description ?? "",
+  )
+    ? ["Developer Tools"]
+    : [];
 
   return unique([...fromTopics, ...fromDescription]).slice(0, 5);
 }
@@ -263,7 +265,11 @@ function inferMaturity(preview: GitHubRepoPreview): ProjectSignalMaturity {
   return "Idea";
 }
 
-function buildBody(preview: GitHubRepoPreview, stack: string[], needs: string[]) {
+function buildBody(
+  preview: GitHubRepoPreview,
+  stack: string[],
+  needs: string[],
+) {
   const description =
     preview.description?.trim() || "A project shared for builder feedback.";
   const evidence = [
@@ -331,9 +337,12 @@ export function buildProjectSignalDraft(
 export function createProjectSignalCardText(
   signal: ProjectSignalMetadata,
 ): string {
-  const stack = signal.stack.length > 0 ? signal.stack.join(", ") : "stack open";
+  const stack =
+    signal.stack.length > 0 ? signal.stack.join(", ") : "stack open";
   const needs =
-    signal.needs.length > 0 ? `needs ${signal.needs.join(", ")}` : "open to discussion";
+    signal.needs.length > 0
+      ? `needs ${signal.needs.join(", ")}`
+      : "open to discussion";
 
   return `${signal.owner}/${signal.name} · ${stack} · ${signal.intent} · ${needs}`;
 }

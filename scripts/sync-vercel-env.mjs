@@ -104,9 +104,13 @@ function extractVercelToken(text) {
 function envTypeForKey(key) {
   if (
     key.startsWith("NEXT_PUBLIC_") ||
-    ["APP_URL", "NEXTAUTH_URL", "STORAGE_DRIVER", "R2_BUCKET", "R2_PUBLIC_BASE_URL"].includes(
-      key,
-    )
+    [
+      "APP_URL",
+      "NEXTAUTH_URL",
+      "STORAGE_DRIVER",
+      "R2_BUCKET",
+      "R2_PUBLIC_BASE_URL",
+    ].includes(key)
   ) {
     return "plain";
   }
@@ -121,7 +125,8 @@ if (!vercelToken) {
 }
 
 const envValues = parseLooseCredentials(rawCredentials);
-const hasGitHubOAuth = envValues.has("GITHUB_ID") && envValues.has("GITHUB_SECRET");
+const hasGitHubOAuth =
+  envValues.has("GITHUB_ID") && envValues.has("GITHUB_SECRET");
 const hasGoogleOAuth =
   envValues.has("GOOGLE_CLIENT_ID") && envValues.has("GOOGLE_CLIENT_SECRET");
 const hasEmail = envValues.has("EMAIL_SERVER") && envValues.has("EMAIL_FROM");
@@ -130,7 +135,9 @@ const missing = requiredForProductionLikeRuntime.filter(
 );
 
 if (!hasGitHubOAuth && !hasGoogleOAuth && !hasEmail) {
-  missing.push("GITHUB_ID/GITHUB_SECRET or GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET or EMAIL_SERVER/EMAIL_FROM");
+  missing.push(
+    "GITHUB_ID/GITHUB_SECRET or GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET or EMAIL_SERVER/EMAIL_FROM",
+  );
 }
 
 if (missing.length > 0) {

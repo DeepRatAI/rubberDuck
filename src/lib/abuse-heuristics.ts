@@ -137,12 +137,7 @@ export function assessUserContent(input: {
     (input.tags ?? []).map((tag) => tag.trim().toLowerCase()).filter(Boolean),
   );
   if ((input.tags?.length ?? 0) >= 10 && uniqueTags.size <= 3) {
-    addFlag(
-      flags,
-      reasons,
-      "tag_stuffing",
-      "Tags look duplicated or stuffed.",
-    );
+    addFlag(flags, reasons, "tag_stuffing", "Tags look duplicated or stuffed.");
   }
 
   const hardBlockFlags = new Set<AbuseFlag>([

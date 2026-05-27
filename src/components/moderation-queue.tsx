@@ -43,7 +43,10 @@ export function ModerationQueue({
     });
   }
 
-  function setEntityStatus(report: ModerationReport, action: "hide" | "restore") {
+  function setEntityStatus(
+    report: ModerationReport,
+    action: "hide" | "restore",
+  ) {
     setStatus(null);
     setError(null);
     startTransition(() => {
@@ -92,7 +95,9 @@ export function ModerationQueue({
                   {report.resolved ? "resolved" : "open"}
                 </Badge>
                 <Badge tone="slate">{report.entityType}</Badge>
-                <Badge tone={report.entityStatus === "hidden" ? "amber" : "slate"}>
+                <Badge
+                  tone={report.entityStatus === "hidden" ? "amber" : "slate"}
+                >
                   {report.entityStatus}
                 </Badge>
                 <span className="text-xs uppercase tracking-[0.16em] text-[color:var(--muted)]">
@@ -113,7 +118,8 @@ export function ModerationQueue({
               </p>
             </div>
             <div className="flex items-start gap-2 lg:col-span-4 lg:justify-end">
-              {report.entityType === "post" || report.entityType === "comment" ? (
+              {report.entityType === "post" ||
+              report.entityType === "comment" ? (
                 <Button
                   type="button"
                   size="sm"

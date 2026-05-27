@@ -99,7 +99,7 @@ function CourseEmbedCard({
           src={embed.embedUrl}
           title={`Embedded video from ${embed.label}`}
           loading="lazy"
-	          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
         <a

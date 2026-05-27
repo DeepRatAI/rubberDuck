@@ -84,6 +84,16 @@ export function buildProjectSignalShareSvg(input: {
     )
     .join("")}
   <text x="90" y="525" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#102A43">By ${escapeXml(input.authorName)} · ${escapeXml(input.projectSignal.maturity)} · ${escapeXml(input.projectSignal.intent)}</text>
-  ${[...stack, ...needs].slice(0, 5).map((label, index) => pill(label, 86 + index * 178, 548, index % 2 === 0 ? "#FFD447" : "#BFE8FF")).join("")}
+  ${[...stack, ...needs]
+    .slice(0, 5)
+    .map((label, index) =>
+      pill(
+        label,
+        86 + index * 178,
+        548,
+        index % 2 === 0 ? "#FFD447" : "#BFE8FF",
+      ),
+    )
+    .join("")}
 </svg>`;
 }

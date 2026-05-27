@@ -41,7 +41,9 @@ export default async function AdminAuditPage({
                     <td className="px-4 py-3 text-[color:var(--muted)]">
                       {event.actorName}
                       {event.actorEmail ? (
-                        <span className="block text-xs">{event.actorEmail}</span>
+                        <span className="block text-xs">
+                          {event.actorEmail}
+                        </span>
                       ) : null}
                     </td>
                     <td className="px-4 py-3">

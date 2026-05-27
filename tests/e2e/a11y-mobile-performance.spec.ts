@@ -107,9 +107,9 @@ test.describe("performance budgets", () => {
       await page.goto(budget.path, { waitUntil: "networkidle" });
 
       const metrics = await page.evaluate(() => {
-        const navigation = performance.getEntriesByType(
-          "navigation",
-        )[0] as PerformanceNavigationTiming | undefined;
+        const navigation = performance.getEntriesByType("navigation")[0] as
+          | PerformanceNavigationTiming
+          | undefined;
         const resources = performance.getEntriesByType(
           "resource",
         ) as PerformanceResourceTiming[];

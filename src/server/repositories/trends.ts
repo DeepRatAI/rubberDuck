@@ -29,7 +29,12 @@ export async function listExternalTrends({
     })
     .from(rssItems)
     .innerJoin(rssSources, eq(rssItems.sourceId, rssSources.id))
-    .where(and(eq(rssSources.enabled, true), gte(rssItems.publishedAt, sevenDaysAgo)))
+    .where(
+      and(
+        eq(rssSources.enabled, true),
+        gte(rssItems.publishedAt, sevenDaysAgo),
+      ),
+    )
     .orderBy(desc(rssItems.publishedAt))
     .limit(1000);
 
@@ -40,10 +45,7 @@ export async function listExternalTrends({
       url: row.url,
       sourceName: row.sourceName,
       tags: Array.from(
-        new Set([
-          ...row.tags,
-          ...(curatedTagsByUrl.get(row.sourceUrl) ?? []),
-        ]),
+        new Set([...row.tags, ...(curatedTagsByUrl.get(row.sourceUrl) ?? [])]),
       ),
       publishedAt: row.publishedAt,
     })),

@@ -2,6 +2,16 @@
   "name": "rubberduck",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.33.2",
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.25.12",
+      "postcss": "8.5.10",
+      "protobufjs": "7.5.8",
+      "next-auth>uuid": "11.1.1",
+      "ws": "8.20.1"
+    }
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +23,7 @@
     "test:e2e": "playwright test",
     "postinstall": "node scripts/sync-pyodide-assets.mjs",
     "pyodide:sync": "node scripts/sync-pyodide-assets.mjs",
-    "env:check": "RUBBERDUCK_STRICT_ENV=true tsx -e \"import './src/lib/env'; console.log('Environment OK')\"",
+    "env:check": "tsx scripts/check-production-env.ts",
     "vercel:env:sync": "node scripts/sync-vercel-env.mjs",
     "i18n:check": "tsx scripts/check-i18n-coverage.ts",
     "security:secrets": "node scripts/check-secrets.mjs",

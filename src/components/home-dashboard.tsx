@@ -71,8 +71,7 @@ export function HomeDashboard({
                   title={featured?.title ?? brand.productName}
                   imageUrl={
                     featured?.imageUrl ??
-                    featured?.media.find((media) => media.type === "image")
-                      ?.url
+                    featured?.media.find((media) => media.type === "image")?.url
                   }
                   priority
                   className="absolute inset-0"

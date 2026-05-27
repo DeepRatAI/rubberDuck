@@ -26,8 +26,16 @@ html[data-theme="cyberduck"] {
   --control-bg: #f8f4e8;
   --control-hover: rgba(23, 19, 15, 0.1);
   --body-gradient:
-    radial-gradient(circle at 12% 0%, rgba(22, 217, 210, 0.14), transparent 24rem),
-    radial-gradient(circle at 84% 8%, rgba(214, 154, 56, 0.16), transparent 20rem),
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(22, 217, 210, 0.14),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 84% 8%,
+      rgba(214, 154, 56, 0.16),
+      transparent 20rem
+    ),
     linear-gradient(135deg, #15130f 0%, #1b1713 45%, #0f1717 100%);
   --grid-x: rgba(22, 217, 210, 0.08);
   --grid-y: rgba(214, 154, 56, 0.065);
@@ -75,8 +83,16 @@ html[data-theme="rubberduck"] {
   --control-bg: #ffffff;
   --control-hover: rgba(255, 212, 71, 0.26);
   --body-gradient:
-    radial-gradient(circle at 12% 0%, rgba(255, 212, 71, 0.14), transparent 28rem),
-    radial-gradient(circle at 90% 8%, rgba(255, 159, 28, 0.08), transparent 30rem),
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(255, 212, 71, 0.14),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(255, 159, 28, 0.08),
+      transparent 30rem
+    ),
     linear-gradient(135deg, #ffffff 0%, #ffffff 72%, #f8fbff 100%);
   --grid-x: transparent;
   --grid-y: transparent;
@@ -202,20 +218,17 @@ html[data-theme="rubberduck"] .rd-button-primary {
 }
 
 .brand-logo-glow {
-  filter:
-    drop-shadow(0 0 12px rgba(255, 212, 71, 0.2))
+  filter: drop-shadow(0 0 12px rgba(255, 212, 71, 0.2))
     drop-shadow(0 14px 28px rgba(16, 42, 67, 0.2));
 }
 
 html[data-theme="cyberduck"] .brand-logo-glow {
-  filter:
-    drop-shadow(0 0 14px rgba(22, 217, 210, 0.22))
+  filter: drop-shadow(0 0 14px rgba(22, 217, 210, 0.22))
     drop-shadow(0 16px 34px rgba(0, 0, 0, 0.34));
 }
 
 html[data-theme="rubberduck"] .brand-logo-glow {
-  filter:
-    drop-shadow(0 0 14px rgba(255, 212, 71, 0.42))
+  filter: drop-shadow(0 0 14px rgba(255, 212, 71, 0.42))
     drop-shadow(0 14px 28px rgba(16, 42, 67, 0.12));
 }
 
@@ -239,7 +252,11 @@ html[data-theme="rubberduck"] .cyber-only-panel {
 html[data-theme="rubberduck"] .theme-shell,
 html[data-theme="rubberduck"] .theme-header {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.93)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(255, 255, 255, 0.93)
+    ),
     #ffffff;
 }
 

@@ -173,10 +173,7 @@ export function CommentActions({
             className="inline-flex items-center gap-1.5 hover:text-rose-200 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isPending}
             onClick={() =>
-              run(
-                () => deleteComment({ commentId }),
-                dictionary.commentRemoved,
-              )
+              run(() => deleteComment({ commentId }), dictionary.commentRemoved)
             }
           >
             <Trash2 className="size-3.5" aria-hidden />
@@ -184,9 +181,7 @@ export function CommentActions({
           </button>
         ) : null}
         {message ? (
-          <span className="status-success rounded-md px-2 py-1">
-            {message}
-          </span>
+          <span className="status-success rounded-md px-2 py-1">{message}</span>
         ) : null}
         {error ? (
           <span className="status-warning rounded-md px-2 py-1">{error}</span>

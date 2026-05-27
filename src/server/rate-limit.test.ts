@@ -40,9 +40,7 @@ describe("rate limiting", () => {
     };
 
     await assertRateLimit(input);
-    await expect(assertRateLimit(input)).rejects.toBeInstanceOf(
-      RateLimitError,
-    );
+    await expect(assertRateLimit(input)).rejects.toBeInstanceOf(RateLimitError);
   });
 
   it("isolates limits by action and actor", async () => {

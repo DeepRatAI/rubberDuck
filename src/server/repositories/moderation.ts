@@ -128,7 +128,9 @@ export async function listModerationReports(): Promise<ModerationReport[]> {
   }));
 }
 
-export async function listAuditEvents(limit = 80): Promise<AuditEventSummary[]> {
+export async function listAuditEvents(
+  limit = 80,
+): Promise<AuditEventSummary[]> {
   const rows = await db
     .select({
       id: auditEvents.id,

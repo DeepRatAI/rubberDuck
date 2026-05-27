@@ -4,8 +4,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 
-export const immutableMediaCacheControl =
-  "public, max-age=31536000, immutable";
+export const immutableMediaCacheControl = "public, max-age=31536000, immutable";
 
 export type ObjectStorageClient = {
   putObject: (input: {

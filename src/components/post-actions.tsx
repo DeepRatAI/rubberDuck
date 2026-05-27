@@ -159,10 +159,7 @@ export function PostActions({
           variant="subtle"
           disabled={isPending}
           onClick={() =>
-            run(
-              () => deletePost({ postId }),
-              dictionary.postRemoved,
-            )
+            run(() => deletePost({ postId }), dictionary.postRemoved)
           }
         >
           <Trash2 className="size-4" aria-hidden />

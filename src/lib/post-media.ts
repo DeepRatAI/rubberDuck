@@ -30,7 +30,10 @@ const postMediaTypes = {
   "image/gif": { extension: "gif", kind: "image" },
   "video/mp4": { extension: "mp4", kind: "video" },
   "video/webm": { extension: "webm", kind: "video" },
-} satisfies Record<PostMediaMimeType, { extension: string; kind: PostMediaKind }>;
+} satisfies Record<
+  PostMediaMimeType,
+  { extension: string; kind: PostMediaKind }
+>;
 
 export const postMediaPublicPathPattern =
   /^\/uploads\/posts\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\.(?:gif|jpe?g|png|webp|mp4|webm)$/;
