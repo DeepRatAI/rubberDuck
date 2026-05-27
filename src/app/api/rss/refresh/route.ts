@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { rssItems, rssSources } from "@/db/schema";
 import { env } from "@/lib/env";
 import { fetchOpenGraphImage } from "@/lib/rss-images";
+import { curatedRssSources } from "@/lib/rss-sources";
 
 type RssItemWithMedia = Parser.Item & {
   enclosure?: { url?: string; type?: string };
@@ -81,6 +82,22 @@ async function parseSourceFeed(
 }
 
 async function refreshRssItems() {
+  await db
+    .insert(rssSources)
+    .values(
+      curatedRssSources.map((source) => ({
+        name: source.name,
+        url: source.url,
+        enabled: true,
+      })),
+    )
+    .onConflictDoUpdate({
+      target: rssSources.url,
+      set: {
+        enabled: true,
+      },
+    });
+
   const sourceRows = await db
     .select()
     .from(rssSources)
