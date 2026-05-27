@@ -1,0 +1,44 @@
+[
+  {
+    "viewport": "desktop",
+    "route": "/",
+    "status": 200,
+    "title": "RubberDuck",
+    "errors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/login",
+    "status": 200,
+    "title": "RubberDuck",
+    "errors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/legal/privacy",
+    "status": 200,
+    "title": "Privacy Policy - RubberDuck",
+    "errors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/",
+    "status": 200,
+    "title": "RubberDuck",
+    "errors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/login",
+    "status": 200,
+    "title": "RubberDuck",
+    "errors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/legal/privacy",
+    "status": 200,
+    "title": "Privacy Policy - RubberDuck",
+    "errors": []
+  }
+]
