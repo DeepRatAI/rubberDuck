@@ -134,7 +134,7 @@ export const curatedRssSources: CuratedRssSource[] = [
   },
   {
     name: "Google Developers Blog",
-    url: "https://developers.googleblog.com/en/rss/",
+    url: "https://developers.googleblog.com/feeds/posts/default?alt=rss",
     language: "en",
     tags: ["google", "developer-tools", "cloud"],
   },
