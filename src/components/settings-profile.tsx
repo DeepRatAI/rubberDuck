@@ -324,7 +324,7 @@ export function SettingsProfile({
             {dictionary.links}
             <input
               className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--accent)]"
-              placeholder="https://example.dev, https://github.com/user"
+              placeholder={dictionary.linksPlaceholder}
               value={links}
               onChange={(event) => setLinks(event.target.value)}
             />
@@ -334,7 +334,7 @@ export function SettingsProfile({
               {dictionary.stack}
               <input
                 className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--accent)]"
-                placeholder="TypeScript, Postgres, Pyodide"
+                placeholder={dictionary.stackPlaceholder}
                 value={stack}
                 onChange={(event) => setStack(event.target.value)}
               />
@@ -343,7 +343,7 @@ export function SettingsProfile({
               {dictionary.interests}
               <input
                 className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--accent)]"
-                placeholder="OSS, ML tooling, RAG"
+                placeholder={dictionary.interestsPlaceholder}
                 value={interests}
                 onChange={(event) => setInterests(event.target.value)}
               />
@@ -352,7 +352,7 @@ export function SettingsProfile({
               {dictionary.contentPreferences}
               <input
                 className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--accent)]"
-                placeholder="Project Signals, Build logs"
+                placeholder={dictionary.contentPreferencesPlaceholder}
                 value={contentPreferences}
                 onChange={(event) => setContentPreferences(event.target.value)}
               />
@@ -361,7 +361,7 @@ export function SettingsProfile({
               {dictionary.participationIntents}
               <input
                 className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--accent)]"
-                placeholder="I review projects, I mentor"
+                placeholder={dictionary.participationIntentsPlaceholder}
                 value={participationIntents}
                 onChange={(event) =>
                   setParticipationIntents(event.target.value)
@@ -479,7 +479,7 @@ export function SettingsProfile({
                 className="control-input h-10 rounded-md border px-3 font-normal outline-none focus:border-[color:var(--danger)]"
                 value={deleteConfirmation}
                 onChange={(event) => setDeleteConfirmation(event.target.value)}
-                placeholder="DELETE"
+                placeholder={dictionary.deleteAccountConfirmationPlaceholder}
               />
             </label>
             <Button

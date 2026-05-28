@@ -154,6 +154,15 @@ const envSchema = z
       });
     }
 
+    if (!value.CRON_SECRET || value.CRON_SECRET.length < 16) {
+      context.addIssue({
+        code: "custom",
+        path: ["CRON_SECRET"],
+        message:
+          "Production requires CRON_SECRET so Vercel Cron can authenticate scheduled refreshes.",
+      });
+    }
+
     if (value.STORAGE_DRIVER === "local") {
       context.addIssue({
         code: "custom",

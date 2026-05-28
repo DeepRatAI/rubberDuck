@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { extractOpenGraphImage } from "./rss-images";
+import { extractOpenGraphImage, isSafeRemoteHttpUrl } from "./rss-images";
 
 describe("RSS visual extraction", () => {
   it("extracts absolute Open Graph images before RubberDuck fallback is needed", () => {
@@ -25,5 +25,18 @@ describe("RSS visual extraction", () => {
     expect(
       extractOpenGraphImage("<title>No image</title>", "https://x.dev"),
     ).toBeNull();
+  });
+
+  it("rejects unsafe image URLs and internal fetch targets", () => {
+    expect(
+      extractOpenGraphImage(
+        '<meta property="og:image" content="data:text/html,<script>alert(1)</script>">',
+        "https://example.dev/post",
+      ),
+    ).toBeNull();
+    expect(isSafeRemoteHttpUrl("http://localhost/admin")).toBe(false);
+    expect(isSafeRemoteHttpUrl("http://127.0.0.1/admin")).toBe(false);
+    expect(isSafeRemoteHttpUrl("http://192.168.1.20/admin")).toBe(false);
+    expect(isSafeRemoteHttpUrl("https://example.dev/post")).toBe(true);
   });
 });

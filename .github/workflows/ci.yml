@@ -16,6 +16,7 @@ env:
   AUTH_SECRET: local-ci-secret-with-at-least-thirty-two-characters
   NEXTAUTH_SECRET: local-ci-secret-with-at-least-thirty-two-characters
   DATABASE_URL: postgres://devit:devit@localhost:5432/devit
+  CRON_SECRET: local-cron-secret-with-at-least-thirty-two-characters
   RSS_REFRESH_SECRET: local-rss-refresh-secret
   STORAGE_DRIVER: local
   RUBBERDUCK_E2E_MODE: "true"

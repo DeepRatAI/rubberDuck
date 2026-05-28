@@ -4,6 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Panel, SectionHeader } from "@/components/ui/panel";
 import type { Locale } from "@/lib/domain";
+import { getDictionary } from "@/lib/i18n";
 import type { PageSearchParams } from "@/lib/routing";
 import { requireAdminUserId } from "@/server/current-user";
 import {
@@ -18,6 +19,7 @@ export default async function AdminRssPage({
 }) {
   const params = searchParams ? await searchParams : {};
   const locale: Locale = params.lang === "es" ? "es" : "en";
+  const dictionary = getDictionary(locale);
   await requireAdminUserId({ locale });
   const sources = await listRssSourceHealth();
   const summary = summarizeRssHealth(sources);
@@ -27,15 +29,15 @@ export default async function AdminRssPage({
       <div className="mx-auto max-w-6xl space-y-5">
         <Panel>
           <SectionHeader
-            title="RSS operations"
-            description="Admin-only source health, freshness, article counts, and direct checks for the home discovery mix."
+            title={dictionary.rssOperations}
+            description={dictionary.rssOperationsDescription}
           />
           <dl className="grid gap-2 p-4 text-sm sm:grid-cols-4">
             {[
-              ["Sources", summary.sources],
-              ["Enabled", summary.enabled],
-              ["Items", summary.totalItems],
-              ["Stale", summary.staleSources],
+              [dictionary.rssSources, summary.sources],
+              [dictionary.rssEnabled, summary.enabled],
+              [dictionary.rssItems, summary.totalItems],
+              [dictionary.rssStale, summary.staleSources],
             ].map(([label, value]) => (
               <div
                 key={label}
@@ -62,7 +64,9 @@ export default async function AdminRssPage({
                       {source.name}
                     </h2>
                     <Badge tone={source.enabled ? "green" : "slate"}>
-                      {source.enabled ? "enabled" : "disabled"}
+                      {source.enabled
+                        ? dictionary.rssSourceEnabled
+                        : dictionary.rssSourceDisabled}
                     </Badge>
                     <Badge tone={source.itemCount > 0 ? "cyan" : "amber"}>
                       {source.itemCount} items

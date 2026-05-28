@@ -103,6 +103,7 @@ describe("environment configuration", () => {
       RUBBERDUCK_STRICT_ENV: "true",
       NEXTAUTH_URL: "https://rubberduck.net",
       NEXTAUTH_SECRET: "production-secret-with-at-least-thirty-two-characters",
+      CRON_SECRET: "cron-secret-with-enough-entropy",
       GITHUB_ID: "github-client-id",
       GITHUB_SECRET: "github-client-secret",
       STORAGE_DRIVER: "r2",
@@ -120,6 +121,31 @@ describe("environment configuration", () => {
 
     expect(parsed.NODE_ENV).toBe("production");
     expect(parsed.APP_URL).toBe("https://rubberduck.net");
+  });
+
+  it("requires a production cron secret for scheduled RSS refreshes", () => {
+    expect(() =>
+      parseEnv({
+        NODE_ENV: "production",
+        RUBBERDUCK_STRICT_ENV: "true",
+        NEXTAUTH_URL: "https://rubberduck.net",
+        NEXTAUTH_SECRET:
+          "production-secret-with-at-least-thirty-two-characters",
+        GITHUB_ID: "github-client-id",
+        GITHUB_SECRET: "github-client-secret",
+        STORAGE_DRIVER: "r2",
+        R2_ACCOUNT_ID: "account-id",
+        R2_BUCKET: "dev4all",
+        R2_ACCESS_KEY_ID: "r2-access-key",
+        R2_SECRET_ACCESS_KEY: "r2-secret-key",
+        R2_PUBLIC_BASE_URL: "https://media.rubberduck.net",
+        UPSTASH_REDIS_REST_URL: "https://example.upstash.io",
+        UPSTASH_REDIS_REST_TOKEN: "redis-token",
+        NEXT_PUBLIC_POSTHOG_TOKEN: "phc_public_token",
+        NEXT_PUBLIC_SENTRY_DSN: "https://public@example.ingest.us.sentry.io/1",
+        ADMIN_EMAILS: "admin@rubberduck.net",
+      }),
+    ).toThrow(/CRON_SECRET/i);
   });
 
   it("keeps the legacy strict env alias working during the rebrand", () => {

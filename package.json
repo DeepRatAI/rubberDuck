@@ -27,7 +27,7 @@
     "vercel:env:sync": "node scripts/sync-vercel-env.mjs",
     "i18n:check": "tsx scripts/check-i18n-coverage.ts",
     "security:secrets": "node scripts/check-secrets.mjs",
-    "security:audit": "pnpm audit --audit-level high",
+    "security:audit": "pnpm audit --audit-level moderate",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",

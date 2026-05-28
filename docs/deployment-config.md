@@ -14,7 +14,8 @@ The app accepts canonical names and common provider aliases:
 - `GITHUB_ID`, `GITHUB_SECRET`
 - `GITHUB_TOKEN` (optional Project Signal API enrichment token)
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
-- `RSS_REFRESH_SECRET`
+- `CRON_SECRET` (Vercel Cron sends this as `Authorization: Bearer $CRON_SECRET`)
+- `RSS_REFRESH_SECRET` (manual/operator refresh secret; may match `CRON_SECRET`)
 - `NEXT_PUBLIC_POSTHOG_TOKEN`, `NEXT_PUBLIC_POSTHOG_HOST`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
@@ -162,3 +163,18 @@ vercel env pull .env.local --yes
 ```
 
 Do not commit `.env.local`.
+
+### RSS Cron
+
+`vercel.json` registers a daily Hobby-compatible cron for `/api/rss/refresh`.
+Vercel invokes cron paths with `GET` against the production deployment. When
+`CRON_SECRET` is set in Vercel, Vercel automatically sends
+`Authorization: Bearer $CRON_SECRET`; the endpoint also accepts
+`x-rubberduck-rss-secret` or `secret=` with `RSS_REFRESH_SECRET` for manual
+operator refreshes.
+
+The route is forced dynamic and Node.js runtime because RSS parsing, OpenGraph
+fetching, and SSRF protections are server-side work. Source parsing is
+concurrent, OpenGraph image enrichment is concurrency-limited, and article URLs
+must be specific `http(s)` URLs. Localhost and private-network fetch targets are
+rejected before server-side OpenGraph requests.

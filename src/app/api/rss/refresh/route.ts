@@ -5,8 +5,12 @@ import Parser from "rss-parser";
 import { db } from "@/db";
 import { rssItems, rssSources } from "@/db/schema";
 import { env } from "@/lib/env";
-import { fetchOpenGraphImage } from "@/lib/rss-images";
+import { hasRssRefreshAccess } from "@/lib/rss-refresh-auth";
+import { fetchOpenGraphImage, isSafeRemoteHttpUrl } from "@/lib/rss-images";
 import { curatedRssSources } from "@/lib/rss-sources";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 type RssItemWithMedia = Parser.Item & {
   enclosure?: { url?: string; type?: string };
@@ -16,29 +20,30 @@ type RssItemWithMedia = Parser.Item & {
 };
 
 function extractImageUrl(item: RssItemWithMedia) {
-  return (
+  const imageUrl =
     (item.enclosure?.type?.startsWith("image/")
       ? item.enclosure.url
       : undefined) ??
     item["media:thumbnail"]?.$?.url ??
     item["media:content"]?.$?.url ??
     item["itunes:image"]?.href ??
-    null
-  );
+    null;
+
+  return imageUrl && isSafeRemoteHttpUrl(imageUrl) ? imageUrl : null;
 }
 
 function hasRefreshAccess(request: NextRequest) {
-  const secret =
-    request.headers.get("x-rubberduck-rss-secret") ??
-    request.headers.get("x-devit-rss-secret");
-  const bearerToken = request.headers
-    .get("authorization")
-    ?.match(/^Bearer\s+(.+)$/i)?.[1];
-  const querySecret = request.nextUrl.searchParams.get("secret");
-  return (
-    secret === env.RSS_REFRESH_SECRET ||
-    bearerToken === env.RSS_REFRESH_SECRET ||
-    querySecret === env.RSS_REFRESH_SECRET
+  return hasRssRefreshAccess(
+    {
+      headerSecret: request.headers.get("x-rubberduck-rss-secret"),
+      legacyHeaderSecret: request.headers.get("x-devit-rss-secret"),
+      authorization: request.headers.get("authorization"),
+      querySecret: request.nextUrl.searchParams.get("secret"),
+    },
+    {
+      cronSecret: env.CRON_SECRET,
+      refreshSecret: env.RSS_REFRESH_SECRET,
+    },
   );
 }
 
@@ -81,6 +86,42 @@ async function parseSourceFeed(
   return parser.parseString(await response.text());
 }
 
+function parsePublishedAt(value: string | undefined) {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date : new Date();
+}
+
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  mapper: (item: T) => Promise<R | null>,
+) {
+  const results: R[] = [];
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const item = items[nextIndex];
+      nextIndex += 1;
+
+      if (!item) {
+        continue;
+      }
+
+      const result = await mapper(item);
+      if (result) {
+        results.push(result);
+      }
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, () => worker()),
+  );
+
+  return results;
+}
+
 async function refreshRssItems() {
   await db
     .insert(rssSources)
@@ -111,23 +152,54 @@ async function refreshRssItems() {
   const feeds = await Promise.allSettled(
     sourceRows.map((source) => parseSourceFeed(parser, source.url)),
   );
-  const items = [];
+  const failures: Array<{ source: string; reason: string }> = [];
+  const candidates: Array<{
+    source: (typeof sourceRows)[number];
+    item: RssItemWithMedia & { title: string; link: string };
+  }> = [];
 
   for (const [index, result] of feeds.entries()) {
     const source = sourceRows[index];
-    if (!source || result.status !== "fulfilled") {
+    if (!source) {
+      continue;
+    }
+
+    if (result.status !== "fulfilled") {
+      failures.push({
+        source: source.name,
+        reason:
+          result.reason instanceof Error
+            ? result.reason.message.slice(0, 160)
+            : "RSS source failed.",
+      });
       continue;
     }
 
     for (const item of result.value.items.slice(0, 8)) {
-      if (!item.title || !item.link || !isSpecificArticleUrl(item.link)) {
+      if (
+        !item.title ||
+        !item.link ||
+        !isSpecificArticleUrl(item.link) ||
+        !isSafeRemoteHttpUrl(item.link)
+      ) {
         continue;
       }
 
+      candidates.push({
+        source,
+        item: { ...item, title: item.title, link: item.link },
+      });
+    }
+  }
+
+  const items = await mapWithConcurrency(
+    candidates,
+    12,
+    async ({ source, item }) => {
       const publishedAt = item.isoDate ?? item.pubDate;
       const sourceImageUrl =
         extractImageUrl(item) ?? (await fetchOpenGraphImage(item.link));
-      const normalized = {
+      return {
         sourceId: source.id,
         title: item.title.slice(0, 240),
         summary: (item.contentSnippet ?? item.content ?? item.title)
@@ -138,29 +210,33 @@ async function refreshRssItems() {
         url: item.link,
         imageUrl: sourceImageUrl,
         tags: [source.name.toLowerCase().replace(/\s+/g, "-"), "rss"],
-        publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
+        publishedAt: parsePublishedAt(publishedAt),
       };
+    },
+  );
 
-      await db
-        .insert(rssItems)
-        .values(normalized)
-        .onConflictDoUpdate({
-          target: rssItems.url,
-          set: {
-            title: normalized.title,
-            summary: normalized.summary,
-            imageUrl: normalized.imageUrl,
-            tags: normalized.tags,
-            publishedAt: normalized.publishedAt,
-          },
-        });
-      items.push(normalized);
-    }
+  for (const normalized of items) {
+    await db
+      .insert(rssItems)
+      .values(normalized)
+      .onConflictDoUpdate({
+        target: rssItems.url,
+        set: {
+          title: normalized.title,
+          summary: normalized.summary,
+          imageUrl: normalized.imageUrl,
+          tags: normalized.tags,
+          publishedAt: normalized.publishedAt,
+        },
+      });
   }
 
   return NextResponse.json({
     refreshedAt: new Date().toISOString(),
     count: items.length,
+    sources: sourceRows.length,
+    failedSources: failures.length,
+    failures,
     items,
   });
 }

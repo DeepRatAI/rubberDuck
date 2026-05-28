@@ -52,7 +52,7 @@ Provider setup is documented in `docs/deployment-config.md`. Manual external set
 ## Routes
 
 - `/` landing page
-- `/app` logged-in home blend of Binnacle, courses, and RSS seed content
+- `/app` logged-in home blend of Binnacle, courses, and refreshed RSS article content
 - `/onboarding` first-run profile setup
 - `/u/[handle]` Identity Hub profile
 - `/people` searchable people directory with explainable follow recommendations
@@ -95,6 +95,7 @@ Provider setup is documented in `docs/deployment-config.md`. Manual external set
 - `src/lib/domain.ts` contains pure business logic and is covered by unit tests.
 - `src/db/seed.ts` writes deterministic product data into Postgres for local development and E2E tests.
 - `src/server/repositories/*` owns Postgres-backed reads and mutations for primary product surfaces.
+- `/api/rss/refresh` bootstraps the curated RSS source catalog, authenticates both Vercel Cron and manual operator refreshes, rejects non-article/root feed links, blocks private-network OpenGraph fetch targets, and stores real article URLs plus inherited cover images when available.
 - `src/server/course-media-storage-adapter.ts` and `src/server/post-media-storage-adapter.ts` own course and Binnacle media storage boundaries for local filesystem and R2-compatible object storage.
 - `src/db/schema.ts` defines the PostgreSQL contract and indexes.
 - `src/components/*` owns the product surfaces and UI composition.
@@ -108,6 +109,7 @@ Provider setup is documented in `docs/deployment-config.md`. Manual external set
 - `SECURITY.md` for vulnerability reporting and security boundaries.
 - `docs/self-hosting.md` for self-hosted deployment assumptions.
 - `docs/data-retention.md` for account export/delete behavior.
+- `docs/production-readiness.md` for the current production gates, staging checks, RSS cron hardening, and launch invariants.
 - `docs/runbooks/release-and-rollback.md` for launch operations.
 - `docs/runbooks/incident-response.md` for production incident handling.
 - `docs/runbooks/moderation-operations.md` for report review and enforcement operations.

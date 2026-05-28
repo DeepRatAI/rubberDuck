@@ -118,61 +118,424 @@ type RevisionEvent = {
 };
 
 type AuthorMode = "compose" | "notebook" | "media" | "review" | "publish";
+type RevisionDiffLabels = Record<
+  | "title"
+  | "sections"
+  | "checks"
+  | "embeds"
+  | "charts"
+  | "unchanged"
+  | "edited",
+  string
+>;
 
-const authorModes: Array<{
-  id: AuthorMode;
-  label: string;
-  detail: string;
-}> = [
-  {
-    id: "compose",
-    label: "Compose",
-    detail: "Structure lessons, references, charts, and runnable cells.",
+const studioCopy = {
+  en: {
+    contextTip: "Context tip",
+    walkthroughKicker: "Course Studio walkthrough",
+    closeWalkthrough: "Close walkthrough",
+    openWalkthroughStep: (step: number) => `Open walkthrough step ${step}`,
+    skip: "Skip",
+    back: "Back",
+    next: "Next",
+    finish: "Finish",
+    commandDeck: "Creator command deck",
+    draftLinked: "Draft linked",
+    newDraft: "New draft",
+    title: "Course Studio",
+    description:
+      "Documentation-grade authoring with notebook import, executable checks, media, charts, revisions, and publish readiness in one dense surface.",
+    walkthrough: "Walkthrough",
+    reviewLaunch: "Review launch",
+    authorModes: [
+      {
+        id: "compose" as const,
+        label: "Compose",
+        detail: "Structure lessons, references, charts, and runnable cells.",
+      },
+      {
+        id: "notebook" as const,
+        label: "Notebook",
+        detail:
+          "Import .ipynb material and keep Colab handoff metadata visible.",
+      },
+      {
+        id: "media" as const,
+        label: "Media",
+        detail: "Upload, label, describe, and attach visual course assets.",
+      },
+      {
+        id: "review" as const,
+        label: "Review",
+        detail:
+          "Compare restore points and inspect the learner-facing preview.",
+      },
+      {
+        id: "publish" as const,
+        label: "Publish",
+        detail: "Clear readiness checks before publishing the course.",
+      },
+    ],
+    walkthroughSteps: [
+      {
+        title: "Start with the spine",
+        body: "Build the course from ordered sections. Each section owns its text, reference code, embeds, charts, and checkpoints.",
+      },
+      {
+        title: "Author like documentation",
+        body: "Use the canvas for narrative hierarchy, then keep executable reference code separate so reader mode can render it cleanly.",
+      },
+      {
+        title: "Bring notebooks in",
+        body: "Upload a .ipynb file to create editable sections, preserve notebook metadata, and expose a Colab handoff target.",
+      },
+      {
+        title: "Attach real media",
+        body: "Use the media library for course-owned images and videos with alt text, captions, labels, and reusable attachments.",
+      },
+      {
+        title: "Publish only when ready",
+        body: "Review restore points, check publish readiness, and keep every save as an immutable revision before sending learners to the reader.",
+      },
+    ],
+    courseSpine: "Course spine",
+    courseSpineTip:
+      "Sections are the learner-facing table of contents. Keep each one focused enough to pair with a runnable check or a clear reference implementation.",
+    addSection: "Add section",
+    section: "Section",
+    creatorAnalytics: "Creator analytics",
+    creatorAnalyticsDescription:
+      "Real course signals from saves, Thanks, completions, section views, and runnable checkpoint passes.",
+    live: "live",
+    metricLearners: "Learners",
+    metricCompletions: "Completions",
+    metricThanks: "Thanks",
+    metricSaves: "Saves",
+    metricSectionViews: "Section views",
+    metricCheckPasses: "Check passes",
+    courseStats: (completions: number, thanks: number, saves: number) =>
+      `${completions} completions / ${thanks} Thanks / ${saves} saves`,
+    notebookImport: "Notebook import",
+    notebookImportTip:
+      "Markdown headings become editable sections. Code cells become reference code unless their metadata marks them as RubberDuck exercises.",
+    notebookImportDescription:
+      "Import `.ipynb` lessons as editable sections, reference code, runnable checkpoints, and Colab-ready notebook metadata.",
+    chooseNotebook: "Choose .ipynb",
+    importPreview: "Import preview",
+    notebookPreviewCounts: (cells: number, sections: number, checks: number) =>
+      `${cells} cells / ${sections} sections / ${checks} runnable checks`,
+    applyImport: "Apply import",
+    discard: "Discard",
+    cell: "Cell",
+    mapping: "Mapping",
+    target: "Target",
+    mediaLibrary: "Media library",
+    mediaLibraryTip:
+      "Course media is owned by the authoring workspace first. Add alt text and captions before attaching assets to sections.",
+    mediaLibraryDescription:
+      "Upload course images or short videos, then attach them to the selected section as first-class resources.",
+    searchMedia: "Search media",
+    searchMediaLibrary: "Search media library",
+    mediaSearchPlaceholder: "Filename, alt text, caption",
+    mediaTypeFilter: "Media type filter",
+    mediaLabelFilter: "Media label filter",
+    label: "Label",
+    allMedia: "All media",
+    images: "Images",
+    videos: "Videos",
+    allLabels: "All labels",
+    showingMedia: (shown: number, total: number) =>
+      `Showing ${shown} of ${total}`,
+    clearFilters: "Clear filters",
+    uploading: "Uploading...",
+    uploadMedia: "Upload media",
+    noMediaMatches: "No media matches this search or filter.",
+    creatorCanvas: "Creator canvas",
+    creatorCanvasDescription:
+      "Structured authoring for documentation-grade lessons, runnable checkpoints, embeds, and notebook-backed courses.",
+    savedAt: (time: string) => `Saved ${time}`,
+    saving: "Saving...",
+    unsavedChanges: "Unsaved changes",
+    saveFailed: "Save failed",
+    draftReady: "Draft ready",
+    saveDraft: "Save draft",
+    resolveReadiness: "Resolve publish readiness checks first.",
+    publishCourse: "Publish course",
+    publish: "Publish",
+    courseTitle: "Title",
+    difficulty: "Difficulty",
+    beginner: "Beginner",
+    intermediate: "Intermediate",
+    advanced: "Advanced",
+    tags: "Tags",
+    sectionTitle: "Section title",
+    moveSectionUp: "Move selected section up",
+    moveSectionDown: "Move selected section down",
+    runnableCell: "Runnable cell",
+    visualizationBlock: "Visualization block",
+    visualizationType: "Visualization type",
+    visualizationData: "Visualization data",
+    bar: "Bar",
+    line: "Line",
+    table: "Table",
+    addChart: "Add chart",
+    livePreview: "Live preview",
+    livePreviewTip:
+      "This preview checks the selected section only. The published reader renders the full course with table of contents, embeds, runner cells, and completion telemetry.",
+    untitledSection: "Untitled section",
+    runnableAttached: (count: number) =>
+      `${count} runnable checkpoint${count === 1 ? "" : "s"} attached.`,
+    versionHistory: "Version history",
+    versionHistoryTip:
+      "Every draft save creates an immutable restore point. Compare a restore point before rolling the canvas back.",
+    restorePoint: "restore point",
+    checks: "checks",
+    compare: "Compare",
+    restore: "Restore",
+    emptyRevisions:
+      "Each save creates an immutable restore point for this course.",
+    comparing: "Comparing",
+    closeRevisionComparison: "Close revision comparison",
+    runnableCheckpoints: "Runnable checkpoints",
+    prompt: "Prompt",
+    starter: "Starter",
+    assertion: "Assertion",
+    successMessage: "Success message",
+    publishingReadiness: "Publishing readiness",
+    publishingReadinessTip:
+      "Publishing is blocked until required content quality checks pass. Draft autosave and restore points continue to work while blocked.",
+    sections: "Sections",
+    runnableChecks: "Runnable checks",
+    notebookMetadata: "Notebook metadata",
+    attached: "attached",
+    optional: "optional",
+    embeds: "Embeds",
+    charts: "Charts",
+    noNegativeCounters: "No public negative counters in course engagement.",
+    tiptapPlaceholder:
+      "Write the lesson. Keep it precise, executable, and documentation-grade.",
+    publishChecks: {
+      title: "Title is specific",
+      description: "Description sets learner expectations",
+      sections: "Every section has a title and body",
+      exercises: "Runnable checks have prompts and assertions",
+      noNegatives: "Course is free of public negative engagement",
+    },
+    revisionDiffLabels: {
+      title: "Title",
+      sections: "Sections",
+      checks: "Runnable checks",
+      embeds: "Embeds",
+      charts: "Charts",
+      unchanged: "unchanged",
+      edited: "edited",
+    },
   },
-  {
-    id: "notebook",
-    label: "Notebook",
-    detail: "Import .ipynb material and keep Colab handoff metadata visible.",
+  es: {
+    contextTip: "Ayuda contextual",
+    walkthroughKicker: "Recorrido de Course Studio",
+    closeWalkthrough: "Cerrar recorrido",
+    openWalkthroughStep: (step: number) => `Abrir paso ${step} del recorrido`,
+    skip: "Omitir",
+    back: "Atrás",
+    next: "Siguiente",
+    finish: "Finalizar",
+    commandDeck: "Panel de mando del creador",
+    draftLinked: "Borrador vinculado",
+    newDraft: "Nuevo borrador",
+    title: "Course Studio",
+    description:
+      "Autoría con calidad de documentación: importación de notebooks, checks ejecutables, media, gráficos, revisiones y preparación de publicación en una superficie densa.",
+    walkthrough: "Recorrido",
+    reviewLaunch: "Revisar lanzamiento",
+    authorModes: [
+      {
+        id: "compose" as const,
+        label: "Componer",
+        detail:
+          "Estructura lecciones, referencias, gráficos y celdas ejecutables.",
+      },
+      {
+        id: "notebook" as const,
+        label: "Notebook",
+        detail:
+          "Importa material .ipynb y conserva visible la metadata de handoff a Colab.",
+      },
+      {
+        id: "media" as const,
+        label: "Media",
+        detail: "Sube, etiqueta, describe y adjunta assets visuales del curso.",
+      },
+      {
+        id: "review" as const,
+        label: "Revisión",
+        detail:
+          "Compara puntos de restauración e inspecciona la preview del estudiante.",
+      },
+      {
+        id: "publish" as const,
+        label: "Publicar",
+        detail:
+          "Completa los checks de preparación antes de publicar el curso.",
+      },
+    ],
+    walkthroughSteps: [
+      {
+        title: "Empieza por la estructura",
+        body: "Construye el curso desde secciones ordenadas. Cada sección contiene texto, código de referencia, embeds, gráficos y checkpoints.",
+      },
+      {
+        title: "Escribe como documentación",
+        body: "Usa el canvas para jerarquía narrativa y separa el código ejecutable para que el reader lo renderice con claridad.",
+      },
+      {
+        title: "Importa notebooks",
+        body: "Sube un .ipynb para crear secciones editables, preservar metadata y exponer un handoff claro a Colab.",
+      },
+      {
+        title: "Adjunta media real",
+        body: "Usa la biblioteca de media para imágenes y videos del curso con alt text, captions, etiquetas y adjuntos reutilizables.",
+      },
+      {
+        title: "Publica solo cuando esté listo",
+        body: "Revisa puntos de restauración, checks de publicación y cada guardado inmutable antes de enviar estudiantes al reader.",
+      },
+    ],
+    courseSpine: "Estructura del curso",
+    courseSpineTip:
+      "Las secciones son la tabla de contenidos del estudiante. Mantén cada una enfocada para vincularla con un check ejecutable o una implementación de referencia.",
+    addSection: "Agregar sección",
+    section: "Sección",
+    creatorAnalytics: "Analítica del creador",
+    creatorAnalyticsDescription:
+      "Señales reales del curso desde guardados, Thanks, completados, vistas de sección y checkpoints aprobados.",
+    live: "en vivo",
+    metricLearners: "Estudiantes",
+    metricCompletions: "Completados",
+    metricThanks: "Thanks",
+    metricSaves: "Guardados",
+    metricSectionViews: "Vistas de sección",
+    metricCheckPasses: "Checks aprobados",
+    courseStats: (completions: number, thanks: number, saves: number) =>
+      `${completions} completados / ${thanks} Thanks / ${saves} guardados`,
+    notebookImport: "Importar notebook",
+    notebookImportTip:
+      "Los headings Markdown se convierten en secciones editables. Las celdas de código pasan a código de referencia salvo que su metadata las marque como ejercicios RubberDuck.",
+    notebookImportDescription:
+      "Importa lecciones `.ipynb` como secciones editables, código de referencia, checkpoints ejecutables y metadata lista para Colab.",
+    chooseNotebook: "Elegir .ipynb",
+    importPreview: "Preview de importación",
+    notebookPreviewCounts: (cells: number, sections: number, checks: number) =>
+      `${cells} celdas / ${sections} secciones / ${checks} checks ejecutables`,
+    applyImport: "Aplicar importación",
+    discard: "Descartar",
+    cell: "Celda",
+    mapping: "Mapeo",
+    target: "Destino",
+    mediaLibrary: "Biblioteca de media",
+    mediaLibraryTip:
+      "La media del curso pertenece primero al workspace de autoría. Agrega alt text y captions antes de adjuntar assets a secciones.",
+    mediaLibraryDescription:
+      "Sube imágenes o videos cortos del curso y adjúntalos a la sección seleccionada como recursos de primera clase.",
+    searchMedia: "Buscar media",
+    searchMediaLibrary: "Buscar en biblioteca de media",
+    mediaSearchPlaceholder: "Archivo, alt text, caption",
+    mediaTypeFilter: "Filtro de tipo de media",
+    mediaLabelFilter: "Filtro de etiqueta de media",
+    label: "Etiqueta",
+    allMedia: "Toda la media",
+    images: "Imágenes",
+    videos: "Videos",
+    allLabels: "Todas las etiquetas",
+    showingMedia: (shown: number, total: number) =>
+      `Mostrando ${shown} de ${total}`,
+    clearFilters: "Limpiar filtros",
+    uploading: "Subiendo...",
+    uploadMedia: "Subir media",
+    noMediaMatches: "Ningún asset coincide con la búsqueda o filtro.",
+    creatorCanvas: "Canvas del creador",
+    creatorCanvasDescription:
+      "Autoría estructurada para lecciones con calidad de documentación, checkpoints ejecutables, embeds y cursos basados en notebooks.",
+    savedAt: (time: string) => `Guardado ${time}`,
+    saving: "Guardando...",
+    unsavedChanges: "Cambios sin guardar",
+    saveFailed: "Error al guardar",
+    draftReady: "Borrador listo",
+    saveDraft: "Guardar borrador",
+    resolveReadiness: "Resuelve los checks de publicación primero.",
+    publishCourse: "Publicar curso",
+    publish: "Publicar",
+    courseTitle: "Título",
+    difficulty: "Dificultad",
+    beginner: "Inicial",
+    intermediate: "Intermedio",
+    advanced: "Avanzado",
+    tags: "Etiquetas",
+    sectionTitle: "Título de sección",
+    moveSectionUp: "Mover sección seleccionada arriba",
+    moveSectionDown: "Mover sección seleccionada abajo",
+    runnableCell: "Celda ejecutable",
+    visualizationBlock: "Bloque de visualización",
+    visualizationType: "Tipo de visualización",
+    visualizationData: "Datos de visualización",
+    bar: "Barras",
+    line: "Línea",
+    table: "Tabla",
+    addChart: "Agregar gráfico",
+    livePreview: "Preview en vivo",
+    livePreviewTip:
+      "Esta preview verifica solo la sección seleccionada. El reader publicado renderiza el curso completo con tabla de contenidos, embeds, celdas ejecutables y telemetría.",
+    untitledSection: "Sección sin título",
+    runnableAttached: (count: number) =>
+      `${count} checkpoint${count === 1 ? "" : "s"} ejecutable${count === 1 ? "" : "s"} adjunto${count === 1 ? "" : "s"}.`,
+    versionHistory: "Historial de versiones",
+    versionHistoryTip:
+      "Cada guardado crea un punto de restauración inmutable. Compara antes de revertir el canvas.",
+    restorePoint: "punto de restauración",
+    checks: "checks",
+    compare: "Comparar",
+    restore: "Restaurar",
+    emptyRevisions:
+      "Cada guardado crea un punto de restauración inmutable para este curso.",
+    comparing: "Comparando",
+    closeRevisionComparison: "Cerrar comparación de revisión",
+    runnableCheckpoints: "Checkpoints ejecutables",
+    prompt: "Prompt",
+    starter: "Starter",
+    assertion: "Assert",
+    successMessage: "Mensaje de éxito",
+    publishingReadiness: "Preparación de publicación",
+    publishingReadinessTip:
+      "La publicación queda bloqueada hasta que pasen los checks de calidad. El autosave y los puntos de restauración siguen funcionando.",
+    sections: "Secciones",
+    runnableChecks: "Checks ejecutables",
+    notebookMetadata: "Metadata de notebook",
+    attached: "adjunta",
+    optional: "opcional",
+    embeds: "Embeds",
+    charts: "Gráficos",
+    noNegativeCounters:
+      "Sin contadores públicos negativos en el engagement del curso.",
+    tiptapPlaceholder:
+      "Escribe la lección. Mantenla precisa, ejecutable y con calidad de documentación.",
+    publishChecks: {
+      title: "El título es específico",
+      description: "La descripción define expectativas del estudiante",
+      sections: "Cada sección tiene título y cuerpo",
+      exercises: "Los checks ejecutables tienen prompts y asserts",
+      noNegatives: "El curso no usa engagement negativo público",
+    },
+    revisionDiffLabels: {
+      title: "Título",
+      sections: "Secciones",
+      checks: "Checks ejecutables",
+      embeds: "Embeds",
+      charts: "Gráficos",
+      unchanged: "sin cambios",
+      edited: "editado",
+    },
   },
-  {
-    id: "media",
-    label: "Media",
-    detail: "Upload, label, describe, and attach visual course assets.",
-  },
-  {
-    id: "review",
-    label: "Review",
-    detail: "Compare restore points and inspect the learner-facing preview.",
-  },
-  {
-    id: "publish",
-    label: "Publish",
-    detail: "Clear readiness checks before publishing the course.",
-  },
-];
-
-const walkthroughSteps = [
-  {
-    title: "Start with the spine",
-    body: "Build the course from ordered sections. Each section owns its text, reference code, embeds, charts, and checkpoints.",
-  },
-  {
-    title: "Author like documentation",
-    body: "Use the canvas for narrative hierarchy, then keep executable reference code separate so reader mode can render it cleanly.",
-  },
-  {
-    title: "Bring notebooks in",
-    body: "Upload a .ipynb file to create editable sections, preserve notebook metadata, and expose a Colab handoff target.",
-  },
-  {
-    title: "Attach real media",
-    body: "Use the media library for course-owned images and videos with alt text, captions, labels, and reusable attachments.",
-  },
-  {
-    title: "Publish only when ready",
-    body: "Review restore points, check publish readiness, and keep every save as an immutable revision before sending learners to the reader.",
-  },
-];
+} as const;
 
 type CourseEditorProps = {
   locale: Locale;
@@ -208,13 +571,19 @@ function toRevisionEvent(
   };
 }
 
-function HelpTip({ children }: { children: React.ReactNode }) {
+function HelpTip({
+  children,
+  label,
+}: {
+  children: React.ReactNode;
+  label: string;
+}) {
   return (
     <span className="group relative inline-flex">
       <button
         type="button"
         className="inline-flex size-6 items-center justify-center rounded-full border border-cyan-300/25 bg-cyan-400/10 text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]"
-        aria-label="Context tip"
+        aria-label={label}
       >
         <CircleHelp className="size-3.5" aria-hidden />
       </button>
@@ -234,6 +603,7 @@ function revisionDiff(
     charts: number;
     embeds: number;
   },
+  labels: RevisionDiffLabels,
 ) {
   const snapshotCharts = revision.snapshot.sections.flatMap(
     (section) => section.visualizations,
@@ -244,23 +614,26 @@ function revisionDiff(
 
   return [
     {
-      label: "Title",
-      value: revision.snapshot.title === current.title ? "unchanged" : "edited",
+      label: labels.title,
+      value:
+        revision.snapshot.title === current.title
+          ? labels.unchanged
+          : labels.edited,
     },
     {
-      label: "Sections",
+      label: labels.sections,
       value: `${revision.snapshot.sections.length} -> ${current.sections.length}`,
     },
     {
-      label: "Runnable checks",
+      label: labels.checks,
       value: `${revision.snapshot.exercises.length} -> ${current.exercises.length}`,
     },
     {
-      label: "Embeds",
+      label: labels.embeds,
       value: `${snapshotEmbeds} -> ${current.embeds}`,
     },
     {
-      label: "Charts",
+      label: labels.charts,
       value: `${snapshotCharts} -> ${current.charts}`,
     },
   ];
@@ -274,6 +647,7 @@ export function CourseEditor({
   initialMediaAssets = [],
   creatorAnalytics,
 }: CourseEditorProps) {
+  const copy = studioCopy[locale];
   const router = useRouter();
   const initialStudioState = useMemo<RestoredCourseStudioState | null>(
     () => (initialSnapshot ? restoreSnapshotToStudio(initialSnapshot) : null),
@@ -378,15 +752,15 @@ export function CourseEditor({
   const publishChecks = useMemo(
     () => [
       {
-        label: "Title is specific",
+        label: copy.publishChecks.title,
         passed: title.trim().length >= 8,
       },
       {
-        label: "Description sets learner expectations",
+        label: copy.publishChecks.description,
         passed: description.trim().length >= 24,
       },
       {
-        label: "Every section has a title and body",
+        label: copy.publishChecks.sections,
         passed:
           sections.length > 0 &&
           sections.every(
@@ -396,7 +770,7 @@ export function CourseEditor({
           ),
       },
       {
-        label: "Runnable checks have prompts and assertions",
+        label: copy.publishChecks.exercises,
         passed: exercises.every(
           (exercise) =>
             exercise.prompt.trim().length >= 8 &&
@@ -405,11 +779,11 @@ export function CourseEditor({
         ),
       },
       {
-        label: "Course is free of public negative engagement",
+        label: copy.publishChecks.noNegatives,
         passed: true,
       },
     ],
-    [description, exercises, sections, title],
+    [copy, description, exercises, sections, title],
   );
   const publishBlocked = publishChecks.some((check) => !check.passed);
   const compareRevision =
@@ -420,11 +794,10 @@ export function CourseEditor({
     () => [
       StarterKit,
       Placeholder.configure({
-        placeholder:
-          "Write the lesson. Keep it precise, executable, and documentation-grade.",
+        placeholder: copy.tiptapPlaceholder,
       }),
     ],
-    [],
+    [copy.tiptapPlaceholder],
   );
 
   const editor = useEditor({
@@ -837,7 +1210,7 @@ export function CourseEditor({
   ]);
 
   const activeWalkthrough =
-    walkthroughSteps[walkthroughStep] ?? walkthroughSteps[0];
+    copy.walkthroughSteps[walkthroughStep] ?? copy.walkthroughSteps[0];
 
   return (
     <div
@@ -855,7 +1228,7 @@ export function CourseEditor({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent)]">
-                  Course Studio walkthrough
+                  {copy.walkthroughKicker}
                 </p>
                 <h2
                   id="course-studio-walkthrough-title"
@@ -868,7 +1241,7 @@ export function CourseEditor({
                 type="button"
                 size="icon"
                 variant="ghost"
-                aria-label="Close walkthrough"
+                aria-label={copy.closeWalkthrough}
                 onClick={() => setWalkthroughOpen(false)}
               >
                 <X className="size-4" aria-hidden />
@@ -878,11 +1251,11 @@ export function CourseEditor({
               {activeWalkthrough.body}
             </p>
             <div className="mt-5 flex items-center gap-2">
-              {walkthroughSteps.map((step, index) => (
+              {copy.walkthroughSteps.map((step, index) => (
                 <button
                   key={step.title}
                   type="button"
-                  aria-label={`Open walkthrough step ${index + 1}`}
+                  aria-label={copy.openWalkthroughStep(index + 1)}
                   className={`h-1.5 flex-1 rounded-full ${
                     index === walkthroughStep
                       ? "bg-[color:var(--accent)]"
@@ -898,7 +1271,7 @@ export function CourseEditor({
                 variant="ghost"
                 onClick={() => setWalkthroughOpen(false)}
               >
-                Skip
+                {copy.skip}
               </Button>
               <div className="flex items-center gap-2">
                 <Button
@@ -909,25 +1282,25 @@ export function CourseEditor({
                     setWalkthroughStep((step) => Math.max(0, step - 1))
                   }
                 >
-                  Back
+                  {copy.back}
                 </Button>
                 <Button
                   type="button"
                   variant="primary"
                   onClick={() => {
-                    if (walkthroughStep === walkthroughSteps.length - 1) {
+                    if (walkthroughStep === copy.walkthroughSteps.length - 1) {
                       setWalkthroughOpen(false);
                       setWalkthroughStep(0);
                       return;
                     }
                     setWalkthroughStep((step) =>
-                      Math.min(walkthroughSteps.length - 1, step + 1),
+                      Math.min(copy.walkthroughSteps.length - 1, step + 1),
                     );
                   }}
                 >
-                  {walkthroughStep === walkthroughSteps.length - 1
-                    ? "Finish"
-                    : "Next"}
+                  {walkthroughStep === copy.walkthroughSteps.length - 1
+                    ? copy.finish
+                    : copy.next}
                 </Button>
               </div>
             </div>
@@ -939,18 +1312,16 @@ export function CourseEditor({
           <div className="grid gap-4 p-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="cyan">Creator command deck</Badge>
+                <Badge tone="cyan">{copy.commandDeck}</Badge>
                 <span className="text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">
-                  {draftId ? "Draft linked" : "New draft"}
+                  {draftId ? copy.draftLinked : copy.newDraft}
                 </span>
               </div>
               <h1 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">
-                Course Studio
+                {copy.title}
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-[color:var(--muted)]">
-                Documentation-grade authoring with notebook import, executable
-                checks, media, charts, revisions, and publish readiness in one
-                dense surface.
+                {copy.description}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -960,7 +1331,7 @@ export function CourseEditor({
                 onClick={() => setWalkthroughOpen(true)}
               >
                 <CircleHelp className="size-4" aria-hidden />
-                Walkthrough
+                {copy.walkthrough}
               </Button>
               <Button
                 type="button"
@@ -968,16 +1339,16 @@ export function CourseEditor({
                 onClick={() => switchAuthorMode("publish")}
               >
                 <ShieldCheck className="size-4" aria-hidden />
-                Review launch
+                {copy.reviewLaunch}
               </Button>
             </div>
           </div>
           <div
             className="grid gap-2 border-t border-[color:var(--line)] p-3 md:grid-cols-5"
             role="tablist"
-            aria-label="Course Studio authoring modes"
+            aria-label={`${copy.title} authoring modes`}
           >
-            {authorModes.map((mode) => (
+            {copy.authorModes.map((mode) => (
               <button
                 key={mode.id}
                 type="button"
@@ -1003,28 +1374,24 @@ export function CourseEditor({
       </section>
       {editor ? (
         <span data-testid="studio-hydrated" className="sr-only">
-          Course Studio hydrated
+          {copy.title} hydrated
         </span>
       ) : null}
       <aside className="min-w-0 space-y-5">
         <Panel className="p-4" data-studio-mode="compose">
           <div className="grid gap-3 sm:flex sm:items-center sm:justify-between">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold">Course spine</h2>
-              <HelpTip>
-                Sections are the learner-facing table of contents. Keep each one
-                focused enough to pair with a runnable check or a clear
-                reference implementation.
-              </HelpTip>
+              <h2 className="text-sm font-semibold">{copy.courseSpine}</h2>
+              <HelpTip label={copy.contextTip}>{copy.courseSpineTip}</HelpTip>
             </div>
             <Button
               size="sm"
-              aria-label="Add section"
+              aria-label={copy.addSection}
               className="w-full scroll-mt-20 sm:w-auto"
               onClick={addSection}
             >
               <Plus className="size-4" aria-hidden />
-              Section
+              {copy.section}
             </Button>
           </div>
           <nav className="mt-4 space-y-1">
@@ -1083,25 +1450,26 @@ export function CourseEditor({
           <Panel className="p-4" data-studio-mode="review">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm font-semibold">Creator analytics</h2>
+                <h2 className="text-sm font-semibold">
+                  {copy.creatorAnalytics}
+                </h2>
                 <p className="mt-1 text-xs leading-5 text-[color:var(--muted)]">
-                  Real course signals from saves, Thanks, completions, section
-                  views, and runnable checkpoint passes.
+                  {copy.creatorAnalyticsDescription}
                 </p>
               </div>
               <Badge tone="green">
                 {creatorAnalytics.publishedCourses}/
-                {creatorAnalytics.totalCourses} live
+                {creatorAnalytics.totalCourses} {copy.live}
               </Badge>
             </div>
             <dl className="mt-4 grid grid-cols-2 gap-2 text-xs">
               {[
-                ["Learners", creatorAnalytics.activeLearners],
-                ["Completions", creatorAnalytics.totalCompletions],
-                ["Thanks", creatorAnalytics.totalThanks],
-                ["Saves", creatorAnalytics.totalSaves],
-                ["Section views", creatorAnalytics.sectionViews],
-                ["Check passes", creatorAnalytics.exercisePasses],
+                [copy.metricLearners, creatorAnalytics.activeLearners],
+                [copy.metricCompletions, creatorAnalytics.totalCompletions],
+                [copy.metricThanks, creatorAnalytics.totalThanks],
+                [copy.metricSaves, creatorAnalytics.totalSaves],
+                [copy.metricSectionViews, creatorAnalytics.sectionViews],
+                [copy.metricCheckPasses, creatorAnalytics.exercisePasses],
               ].map(([label, value]) => (
                 <div
                   key={label}
@@ -1132,8 +1500,11 @@ export function CourseEditor({
                       </Badge>
                     </div>
                     <p className="mt-1 text-[color:var(--muted)]">
-                      {course.completions} completions / {course.thanks} Thanks
-                      / {course.saves} saves
+                      {copy.courseStats(
+                        course.completions,
+                        course.thanks,
+                        course.saves,
+                      )}
                     </p>
                   </div>
                 ))}
@@ -1144,20 +1515,15 @@ export function CourseEditor({
 
         <Panel className="p-4" data-studio-mode="notebook">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold">Notebook import</h2>
-            <HelpTip>
-              Markdown headings become editable sections. Code cells become
-              reference code unless their metadata marks them as RubberDuck
-              exercises.
-            </HelpTip>
+            <h2 className="text-sm font-semibold">{copy.notebookImport}</h2>
+            <HelpTip label={copy.contextTip}>{copy.notebookImportTip}</HelpTip>
           </div>
           <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">
-            Import `.ipynb` lessons as editable sections, reference code,
-            runnable checkpoints, and Colab-ready notebook metadata.
+            {copy.notebookImportDescription}
           </p>
           <label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-600 hover:border-blue-300 hover:bg-blue-50">
             <FileUp className="size-4" aria-hidden />
-            {notebook?.fileName ?? "Choose .ipynb"}
+            {notebook?.fileName ?? copy.chooseNotebook}
             <input
               type="file"
               accept=".ipynb,application/x-ipynb+json"
@@ -1175,12 +1541,15 @@ export function CourseEditor({
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="font-semibold text-slate-900">
-                    Import preview: {pendingNotebookImport.metadata.fileName}
+                    {copy.importPreview}:{" "}
+                    {pendingNotebookImport.metadata.fileName}
                   </p>
                   <p className="mt-1">
-                    {pendingNotebookImport.metadata.cellCount} cells /{" "}
-                    {pendingNotebookImport.sections.length} sections /{" "}
-                    {pendingNotebookImport.exercises.length} runnable checks
+                    {copy.notebookPreviewCounts(
+                      pendingNotebookImport.metadata.cellCount,
+                      pendingNotebookImport.sections.length,
+                      pendingNotebookImport.exercises.length,
+                    )}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -1190,7 +1559,7 @@ export function CourseEditor({
                     variant="primary"
                     onClick={applyPendingNotebookImport}
                   >
-                    Apply import
+                    {copy.applyImport}
                   </Button>
                   <Button
                     type="button"
@@ -1198,7 +1567,7 @@ export function CourseEditor({
                     variant="ghost"
                     onClick={() => setPendingNotebookImport(null)}
                   >
-                    Discard
+                    {copy.discard}
                   </Button>
                 </div>
               </div>
@@ -1206,9 +1575,9 @@ export function CourseEditor({
                 <table className="w-full text-left">
                   <thead className="sticky top-0 bg-amber-100 text-[11px] uppercase text-amber-900">
                     <tr>
-                      <th className="px-2 py-1">Cell</th>
-                      <th className="px-2 py-1">Mapping</th>
-                      <th className="px-2 py-1">Target</th>
+                      <th className="px-2 py-1">{copy.cell}</th>
+                      <th className="px-2 py-1">{copy.mapping}</th>
+                      <th className="px-2 py-1">{copy.target}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1261,27 +1630,23 @@ export function CourseEditor({
         <Panel className="p-4" data-studio-mode="media">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold">Media library</h2>
-              <HelpTip>
-                Course media is owned by the authoring workspace first. Add alt
-                text and captions before attaching assets to sections.
-              </HelpTip>
+              <h2 className="text-sm font-semibold">{copy.mediaLibrary}</h2>
+              <HelpTip label={copy.contextTip}>{copy.mediaLibraryTip}</HelpTip>
             </div>
             <Badge tone="blue">{mediaAssets.length}</Badge>
           </div>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            Upload course images or short videos, then attach them to the
-            selected section as first-class resources.
+            {copy.mediaLibraryDescription}
           </p>
           <div className="mt-4 grid gap-3">
             <label className="grid gap-1 text-xs font-medium text-slate-600">
-              Search media
+              {copy.searchMedia}
               <span className="flex h-9 min-w-0 items-center gap-2 rounded-md border border-slate-200 bg-white px-2 text-slate-500 focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-100">
                 <Search className="size-3.5 shrink-0" aria-hidden />
                 <input
-                  aria-label="Search media library"
+                  aria-label={copy.searchMediaLibrary}
                   className="min-w-0 flex-1 bg-transparent text-sm font-normal text-slate-900 outline-none placeholder:text-slate-400"
-                  placeholder="Filename, alt text, caption"
+                  placeholder={copy.mediaSearchPlaceholder}
                   value={mediaQuery}
                   onChange={(event) => setMediaQuery(event.target.value)}
                 />
@@ -1289,15 +1654,15 @@ export function CourseEditor({
             </label>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div
-                aria-label="Media type filter"
+                aria-label={copy.mediaTypeFilter}
                 className="inline-grid grid-cols-3 rounded-md border border-slate-200 bg-slate-50 p-0.5"
                 role="group"
               >
                 {(
                   [
-                    ["all", "All media"],
-                    ["image", "Images"],
-                    ["video", "Videos"],
+                    ["all", copy.allMedia],
+                    ["image", copy.images],
+                    ["video", copy.videos],
                   ] satisfies Array<[CourseMediaKindFilter, string]>
                 ).map(([kind, label]) => (
                   <button
@@ -1316,14 +1681,14 @@ export function CourseEditor({
                 ))}
               </div>
               <label className="grid gap-1 text-xs font-medium text-slate-600">
-                Label
+                {copy.label}
                 <select
-                  aria-label="Media label filter"
+                  aria-label={copy.mediaLabelFilter}
                   className="h-8 rounded-md border border-slate-200 bg-white px-2 text-xs font-normal text-slate-700"
                   value={mediaLabelFilter}
                   onChange={(event) => setMediaLabelFilter(event.target.value)}
                 >
-                  <option value="all">All labels</option>
+                  <option value="all">{copy.allLabels}</option>
                   {mediaLabels.map((label) => (
                     <option key={label} value={label}>
                       {label}
@@ -1336,7 +1701,10 @@ export function CourseEditor({
                 aria-live="polite"
                 aria-atomic="true"
               >
-                Showing {filteredMediaAssets.length} of {mediaAssets.length}
+                {copy.showingMedia(
+                  filteredMediaAssets.length,
+                  mediaAssets.length,
+                )}
               </p>
             </div>
             {hasMediaFilters ? (
@@ -1352,13 +1720,13 @@ export function CourseEditor({
                 }}
               >
                 <RotateCcw className="size-3.5" aria-hidden />
-                Clear filters
+                {copy.clearFilters}
               </Button>
             ) : null}
           </div>
           <label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-600 hover:border-cyan-300 hover:bg-cyan-50">
             <ImagePlus className="size-4" aria-hidden />
-            {isMediaPending ? "Uploading..." : "Upload media"}
+            {isMediaPending ? copy.uploading : copy.uploadMedia}
             <input
               type="file"
               accept="image/avif,image/gif,image/jpeg,image/png,image/webp,video/mp4,video/webm"
@@ -1492,7 +1860,7 @@ export function CourseEditor({
             ) : null}
             {mediaAssets.length > 0 && filteredMediaAssets.length === 0 ? (
               <p className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-500">
-                No media matches this search or filter.
+                {copy.noMediaMatches}
               </p>
             ) : null}
           </div>
@@ -1502,38 +1870,36 @@ export function CourseEditor({
       <main className="min-w-0" data-studio-mode="compose">
         <Panel>
           <SectionHeader
-            title="Creator canvas"
-            description="Structured authoring for documentation-grade lessons, runnable checkpoints, embeds, and notebook-backed courses."
+            title={copy.creatorCanvas}
+            description={copy.creatorCanvasDescription}
             action={
               <div className="flex flex-wrap items-center gap-2">
                 <Badge tone={status === "error" ? "amber" : "green"}>
                   <Check className="mr-1 size-3" aria-hidden />
                   {status === "saved"
-                    ? `Saved ${autosavedAt}`
+                    ? copy.savedAt(autosavedAt)
                     : status === "saving"
-                      ? "Saving..."
+                      ? copy.saving
                       : status === "dirty"
-                        ? "Unsaved changes"
+                        ? copy.unsavedChanges
                         : status === "error"
-                          ? "Save failed"
-                          : "Draft ready"}
+                          ? copy.saveFailed
+                          : copy.draftReady}
                 </Badge>
                 <Button onClick={() => persist("draft")} disabled={isPending}>
                   <Save className="size-4" aria-hidden />
-                  Save draft
+                  {copy.saveDraft}
                 </Button>
                 <Button
                   variant="primary"
                   onClick={() => persist("published")}
                   disabled={isPending || publishBlocked}
                   title={
-                    publishBlocked
-                      ? "Resolve publish readiness checks first."
-                      : "Publish course"
+                    publishBlocked ? copy.resolveReadiness : copy.publishCourse
                   }
                 >
                   <Sparkles className="size-4" aria-hidden />
-                  Publish
+                  {copy.publish}
                 </Button>
               </div>
             }
@@ -1545,7 +1911,7 @@ export function CourseEditor({
                 className="text-xs font-medium uppercase text-slate-500"
                 htmlFor="course-title"
               >
-                Title
+                {copy.courseTitle}
               </label>
               <textarea
                 id="course-title"
@@ -1568,7 +1934,7 @@ export function CourseEditor({
             </div>
             <div className="space-y-3">
               <label className="block text-xs font-medium uppercase text-slate-500">
-                Difficulty
+                {copy.difficulty}
               </label>
               <select
                 className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm"
@@ -1583,12 +1949,12 @@ export function CourseEditor({
                   setStatus("dirty");
                 }}
               >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                <option value="beginner">{copy.beginner}</option>
+                <option value="intermediate">{copy.intermediate}</option>
+                <option value="advanced">{copy.advanced}</option>
               </select>
               <label className="block text-xs font-medium uppercase text-slate-500">
-                Tags
+                {copy.tags}
               </label>
               <input
                 className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm"
@@ -1603,7 +1969,7 @@ export function CourseEditor({
 
           <div className="border-b border-slate-200 p-5">
             <label className="text-xs font-medium uppercase text-slate-500">
-              Section title
+              {copy.sectionTitle}
             </label>
             <div className="mt-2 flex items-center gap-2">
               <input
@@ -1615,7 +1981,7 @@ export function CourseEditor({
               />
               <Button
                 size="icon"
-                aria-label="Move selected section up"
+                aria-label={copy.moveSectionUp}
                 onClick={() => moveSelectedSection("up")}
                 disabled={
                   sections.findIndex(
@@ -1627,7 +1993,7 @@ export function CourseEditor({
               </Button>
               <Button
                 size="icon"
-                aria-label="Move selected section down"
+                aria-label={copy.moveSectionDown}
                 onClick={() => moveSelectedSection("down")}
                 disabled={
                   sections.findIndex(
@@ -1684,7 +2050,7 @@ export function CourseEditor({
             </Button>
             <Button size="sm" variant="subtle" onClick={addExercise}>
               <Play className="size-4" aria-hidden />
-              Runnable cell
+              {copy.runnableCell}
             </Button>
           </div>
 
@@ -1775,7 +2141,7 @@ export function CourseEditor({
                   className="text-xs font-medium uppercase text-slate-500"
                   htmlFor="visualization-title"
                 >
-                  Visualization block
+                  {copy.visualizationBlock}
                 </label>
                 <Badge tone="blue">
                   {selectedSection?.visualizations.length ?? 0}
@@ -1784,7 +2150,7 @@ export function CourseEditor({
               <div className="mt-2 grid gap-2">
                 <div className="grid gap-2 sm:grid-cols-[120px_minmax(0,1fr)]">
                   <select
-                    aria-label="Visualization type"
+                    aria-label={copy.visualizationType}
                     className="h-10 min-w-0 rounded-md border border-slate-200 bg-white px-3 text-sm"
                     value={visualizationType}
                     onChange={(event) =>
@@ -1793,9 +2159,9 @@ export function CourseEditor({
                       )
                     }
                   >
-                    <option value="bar">Bar</option>
-                    <option value="line">Line</option>
-                    <option value="table">Table</option>
+                    <option value="bar">{copy.bar}</option>
+                    <option value="line">{copy.line}</option>
+                    <option value="table">{copy.table}</option>
                   </select>
                   <input
                     id="visualization-title"
@@ -1809,7 +2175,7 @@ export function CourseEditor({
                 </div>
                 <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
                   <textarea
-                    aria-label="Visualization data"
+                    aria-label={copy.visualizationData}
                     className="min-h-20 resize-y rounded-md border border-slate-200 bg-white px-3 py-2 font-mono text-xs leading-5"
                     value={visualizationRows}
                     onChange={(event) => {
@@ -1825,7 +2191,7 @@ export function CourseEditor({
                     ) : (
                       <BarChart3 className="size-4" aria-hidden />
                     )}
-                    Add chart
+                    {copy.addChart}
                   </Button>
                 </div>
               </div>
@@ -1871,16 +2237,12 @@ export function CourseEditor({
       <aside className="min-w-0 space-y-5">
         <Panel className="p-4" data-studio-mode="review">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold">Live preview</h2>
-            <HelpTip>
-              This preview checks the selected section only. The published
-              reader renders the full course with table of contents, embeds,
-              runner cells, and completion telemetry.
-            </HelpTip>
+            <h2 className="text-sm font-semibold">{copy.livePreview}</h2>
+            <HelpTip label={copy.contextTip}>{copy.livePreviewTip}</HelpTip>
           </div>
           <div className="mt-3 rounded-lg border border-slate-200 bg-white p-3">
             <p className="text-xs font-medium uppercase text-slate-500">
-              {selectedSection?.title ?? "Untitled section"}
+              {selectedSection?.title ?? copy.untitledSection}
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-700">
               {selectedSection?.body}
@@ -1892,8 +2254,7 @@ export function CourseEditor({
             ) : null}
             {selectedExercises.length > 0 ? (
               <div className="mt-3 rounded-md bg-blue-50 p-2 text-xs text-blue-800">
-                {selectedExercises.length} runnable checkpoint
-                {selectedExercises.length === 1 ? "" : "s"} attached.
+                {copy.runnableAttached(selectedExercises.length)}
               </div>
             ) : null}
           </div>
@@ -1902,10 +2263,9 @@ export function CourseEditor({
         <Panel className="p-4" data-studio-mode="review">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold">Version history</h2>
-              <HelpTip>
-                Every draft save creates an immutable restore point. Compare a
-                restore point before rolling the canvas back.
+              <h2 className="text-sm font-semibold">{copy.versionHistory}</h2>
+              <HelpTip label={copy.contextTip}>
+                {copy.versionHistoryTip}
               </HelpTip>
             </div>
             <Badge tone="slate">{revisionEvents.length}</Badge>
@@ -1920,7 +2280,7 @@ export function CourseEditor({
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="font-medium">
-                        v{revision.revisionNumber} restore point
+                        v{revision.revisionNumber} {copy.restorePoint}
                       </p>
                       <p className="mt-1 truncate text-xs text-slate-600">
                         {revision.snapshot.title}
@@ -1929,8 +2289,8 @@ export function CourseEditor({
                         {formatDateTime(revision.createdAt, locale)}
                       </p>
                       <p className="mt-2 text-xs text-slate-500">
-                        {revision.snapshot.sections.length} sections /{" "}
-                        {revision.snapshot.exercises.length} checks
+                        {revision.snapshot.sections.length} {copy.sections} /{" "}
+                        {revision.snapshot.exercises.length} {copy.checks}
                       </p>
                     </div>
                     <Button
@@ -1941,7 +2301,7 @@ export function CourseEditor({
                       onClick={() => setCompareRevisionId(revision.id)}
                     >
                       <GitCompare className="size-3.5" aria-hidden />
-                      Compare
+                      {copy.compare}
                     </Button>
                     <Button
                       type="button"
@@ -1951,39 +2311,43 @@ export function CourseEditor({
                       onClick={() => restoreRevision(revision)}
                     >
                       <RotateCcw className="size-3.5" aria-hidden />
-                      Restore v{revision.revisionNumber}
+                      {copy.restore} v{revision.revisionNumber}
                     </Button>
                   </div>
                 </div>
               ))
             ) : (
               <p className="text-sm leading-6 text-slate-500">
-                Each save creates an immutable restore point for this course.
+                {copy.emptyRevisions}
               </p>
             )}
             {compareRevision ? (
               <div className="rounded-md border border-cyan-200 bg-cyan-50 p-3 text-xs text-slate-700">
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-semibold text-slate-900">
-                    Comparing v{compareRevision.revisionNumber}
+                    {copy.comparing} v{compareRevision.revisionNumber}
                   </p>
                   <button
                     type="button"
                     className="rounded p-1 text-slate-500 hover:bg-white"
-                    aria-label="Close revision comparison"
+                    aria-label={copy.closeRevisionComparison}
                     onClick={() => setCompareRevisionId(null)}
                   >
                     <X className="size-3.5" aria-hidden />
                   </button>
                 </div>
                 <dl className="mt-2 grid grid-cols-2 gap-2">
-                  {revisionDiff(compareRevision, {
-                    title,
-                    sections,
-                    exercises,
-                    charts: currentCharts,
-                    embeds: currentEmbeds,
-                  }).map((item) => (
+                  {revisionDiff(
+                    compareRevision,
+                    {
+                      title,
+                      sections,
+                      exercises,
+                      charts: currentCharts,
+                      embeds: currentEmbeds,
+                    },
+                    copy.revisionDiffLabels,
+                  ).map((item) => (
                     <div key={item.label} className="rounded bg-white p-2">
                       <dt className="text-[11px] uppercase text-slate-500">
                         {item.label}
@@ -2001,7 +2365,9 @@ export function CourseEditor({
 
         <Panel className="p-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-sm font-semibold">Runnable checkpoints</h2>
+            <h2 className="text-sm font-semibold">
+              {copy.runnableCheckpoints}
+            </h2>
             <Badge tone="blue">{selectedExercises.length}</Badge>
           </div>
           <div className="mt-4 space-y-4">
@@ -2011,7 +2377,7 @@ export function CourseEditor({
                 className="rounded-lg border border-slate-200 bg-white p-3"
               >
                 <label className="text-xs font-medium uppercase text-slate-500">
-                  Prompt
+                  {copy.prompt}
                 </label>
                 <textarea
                   className="mt-1 min-h-16 w-full resize-y bg-transparent text-sm outline-none"
@@ -2021,7 +2387,7 @@ export function CourseEditor({
                   }
                 />
                 <label className="mt-3 block text-xs font-medium uppercase text-slate-500">
-                  Starter
+                  {copy.starter}
                 </label>
                 <textarea
                   className="mt-1 min-h-24 w-full resize-y rounded-md bg-slate-950 p-3 font-mono text-xs text-slate-100 outline-none"
@@ -2033,7 +2399,7 @@ export function CourseEditor({
                   }
                 />
                 <label className="mt-3 block text-xs font-medium uppercase text-slate-500">
-                  Assertion
+                  {copy.assertion}
                 </label>
                 <textarea
                   className="mt-1 min-h-20 w-full resize-y rounded-md bg-slate-950 p-3 font-mono text-xs text-slate-100 outline-none"
@@ -2045,7 +2411,7 @@ export function CourseEditor({
                   }
                 />
                 <label className="mt-3 block text-xs font-medium uppercase text-slate-500">
-                  Success message
+                  {copy.successMessage}
                 </label>
                 <input
                   className="mt-1 h-9 w-full rounded-md border border-slate-200 px-3 text-sm"
@@ -2063,24 +2429,33 @@ export function CourseEditor({
 
         <Panel className="p-4" data-studio-mode="publish">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold">Publishing readiness</h2>
-            <HelpTip>
-              Publishing is blocked until required content quality checks pass.
-              Draft autosave and restore points continue to work while blocked.
+            <h2 className="text-sm font-semibold">
+              {copy.publishingReadiness}
+            </h2>
+            <HelpTip label={copy.contextTip}>
+              {copy.publishingReadinessTip}
             </HelpTip>
           </div>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            <li>Sections: {sections.length}</li>
-            <li>Runnable checks: {exercises.length}</li>
-            <li>Notebook metadata: {notebook ? "attached" : "optional"}</li>
             <li>
-              Embeds: {sections.flatMap((section) => section.embeds).length}
+              {copy.sections}: {sections.length}
             </li>
             <li>
-              Charts:{" "}
+              {copy.runnableChecks}: {exercises.length}
+            </li>
+            <li>
+              {copy.notebookMetadata}:{" "}
+              {notebook ? copy.attached : copy.optional}
+            </li>
+            <li>
+              {copy.embeds}:{" "}
+              {sections.flatMap((section) => section.embeds).length}
+            </li>
+            <li>
+              {copy.charts}:{" "}
               {sections.flatMap((section) => section.visualizations).length}
             </li>
-            <li>No public negative counters in course engagement.</li>
+            <li>{copy.noNegativeCounters}</li>
           </ul>
           <div className="mt-4 space-y-2">
             {publishChecks.map((check) => (

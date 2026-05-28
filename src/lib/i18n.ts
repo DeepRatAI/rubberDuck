@@ -335,6 +335,7 @@ export const dictionaries = {
     location: "Location",
     workStatus: "Work status",
     links: "Links",
+    linksPlaceholder: "https://example.dev, https://github.com/user",
     avatar: "Avatar",
     banner: "Banner",
     uploadAvatar: "Upload avatar",
@@ -350,6 +351,10 @@ export const dictionaries = {
     privateVisibility: "private",
     profileCustomization:
       "Avatar, banner, palette, and theme metadata are stored on the profile model for full Identity Hub customization.",
+    stackPlaceholder: "TypeScript, Postgres, Pyodide",
+    interestsPlaceholder: "OSS, ML tooling, RAG",
+    contentPreferencesPlaceholder: "Project Signals, Build logs",
+    participationIntentsPlaceholder: "I review projects, I mentor",
     accountDataControls: "Account data controls",
     accountDataControlsDescription:
       "Export your data or permanently delete your account. Provider tokens and session secrets are never exported.",
@@ -362,6 +367,7 @@ export const dictionaries = {
     deleteAccountDescription:
       "This permanently removes your account and cascades your profile, posts, comments, courses, saves, and progress. Type DELETE to confirm.",
     deleteAccountConfirmationLabel: "Confirmation",
+    deleteAccountConfirmationPlaceholder: "DELETE",
     accountDeleteFailed: "Account deletion failed.",
     activationBoard: "RubberDuck launch board",
     activationBoardDescription:
@@ -397,9 +403,18 @@ export const dictionaries = {
     adminUsers: "Users",
     adminUsersDescription:
       "Issue warnings, suspensions, bans, and restorations with an audit trail.",
+    accountModeration: "Account moderation",
     adminRss: "RSS health",
     adminRssDescription:
       "Inspect source freshness, stored article counts, and stale feeds.",
+    rssOperations: "RSS operations",
+    rssOperationsDescription:
+      "Admin-only source health, freshness, article counts, and direct checks for the home discovery mix.",
+    rssEnabled: "Enabled",
+    rssItems: "Items",
+    rssStale: "Stale",
+    rssSourceEnabled: "enabled",
+    rssSourceDisabled: "disabled",
     adminAudit: "Audit trail",
     adminAuditDescription:
       "Immutable administrative and safety events for moderation and compliance review.",
@@ -753,6 +768,7 @@ export const dictionaries = {
     location: "Ubicación",
     workStatus: "Estado laboral",
     links: "Links",
+    linksPlaceholder: "https://example.dev, https://github.com/user",
     avatar: "Avatar",
     banner: "Portada",
     uploadAvatar: "Subir avatar",
@@ -768,6 +784,10 @@ export const dictionaries = {
     privateVisibility: "privado",
     profileCustomization:
       "Avatar, portada, paleta y metadatos de tema se guardan en el modelo de perfil para personalización completa del Hub de identidad.",
+    stackPlaceholder: "TypeScript, Postgres, Pyodide",
+    interestsPlaceholder: "OSS, herramientas ML, RAG",
+    contentPreferencesPlaceholder: "Project Signals, build logs",
+    participationIntentsPlaceholder: "Reviso proyectos, hago mentoría",
     accountDataControls: "Controles de datos de cuenta",
     accountDataControlsDescription:
       "Exporta tus datos o elimina permanentemente tu cuenta. Tokens de proveedores y secretos de sesión nunca se exportan.",
@@ -780,6 +800,7 @@ export const dictionaries = {
     deleteAccountDescription:
       "Esto elimina permanentemente tu cuenta y en cascada tu perfil, posts, comentarios, cursos, guardados y progreso. Escribe DELETE para confirmar.",
     deleteAccountConfirmationLabel: "Confirmación",
+    deleteAccountConfirmationPlaceholder: "DELETE",
     accountDeleteFailed: "Falló la eliminación de cuenta.",
     activationBoard: "Tablero de lanzamiento RubberDuck",
     activationBoardDescription:
@@ -815,9 +836,18 @@ export const dictionaries = {
     adminUsers: "Usuarios",
     adminUsersDescription:
       "Emite advertencias, suspensiones, bans y restauraciones con auditoría.",
+    accountModeration: "Moderación de cuentas",
     adminRss: "Salud RSS",
     adminRssDescription:
       "Inspecciona frescura de fuentes, conteo de artículos y feeds vencidos.",
+    rssOperations: "Operaciones RSS",
+    rssOperationsDescription:
+      "Salud de fuentes, frescura, cantidad de artículos y checks directos del mix de descubrimiento del inicio.",
+    rssEnabled: "Habilitadas",
+    rssItems: "Items",
+    rssStale: "Vencidas",
+    rssSourceEnabled: "habilitada",
+    rssSourceDisabled: "deshabilitada",
     adminAudit: "Auditoría",
     adminAuditDescription:
       "Eventos administrativos y de seguridad para revisión de moderación y cumplimiento.",
