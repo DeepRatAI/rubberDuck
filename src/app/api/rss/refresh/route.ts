@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq, ne, sql } from "drizzle-orm";
 import Parser from "rss-parser";
 
 import { db } from "@/db";
@@ -123,6 +123,15 @@ async function mapWithConcurrency<T, R>(
 }
 
 async function refreshRssItems() {
+  for (const source of curatedRssSources) {
+    await db
+      .update(rssSources)
+      .set({ enabled: false })
+      .where(
+        and(eq(rssSources.name, source.name), ne(rssSources.url, source.url)),
+      );
+  }
+
   await db
     .insert(rssSources)
     .values(
@@ -135,6 +144,7 @@ async function refreshRssItems() {
     .onConflictDoUpdate({
       target: rssSources.url,
       set: {
+        name: sql`excluded.name`,
         enabled: true,
       },
     });
