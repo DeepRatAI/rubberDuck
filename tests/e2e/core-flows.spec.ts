@@ -68,6 +68,16 @@ test("binnacle feed filters technical posts and excludes rejection counters", as
   await expect(page.getByText(/dislike/i)).toHaveCount(0);
 });
 
+test("app shell keeps Saved as a single sidebar destination", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/app?lang=en", { waitUntil: "domcontentloaded" });
+
+  await expect(page.locator('a[href="/saved?lang=en"]')).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Saved" })).toBeVisible();
+});
+
 test("course reader exposes notebook execution controls", async ({
   page,
   request,

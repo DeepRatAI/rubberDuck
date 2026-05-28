@@ -152,13 +152,6 @@ export async function AppShell({
               <div className="flex items-center gap-3">
                 <ThemeToggle />
                 <LanguageToggle locale={locale} />
-                <Link
-                  href={`/saved?lang=${locale}`}
-                  className="flex size-9 items-center justify-center rounded-md border border-[color:var(--line)] text-[color:var(--muted)] hover:bg-white/5"
-                  aria-label={dictionary.save}
-                >
-                  <Bookmark className="size-4" aria-hidden />
-                </Link>
               </div>
             </div>
             <div className="flex-1 px-4 py-5 sm:px-6">{children}</div>
