@@ -76,7 +76,7 @@ async function parseSourceFeed(
         "application/rss+xml, application/atom+xml, application/xml, text/xml",
       "user-agent": "rubberduck-rss-refresh/0.1 (+https://rubberduck.net)",
     },
-    signal: AbortSignal.timeout(6000),
+    signal: AbortSignal.timeout(10000),
   });
 
   if (!response.ok) {
